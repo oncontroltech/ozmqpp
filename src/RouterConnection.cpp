@@ -60,9 +60,11 @@ OZMQPP::RouterConnection::ReceiveRouterMessage()
         }
         else
         {
+            char* data_array_start = (char*)zmq_msg_data(&part_message);
+            char* data_array_end = (char*)zmq_msg_data(&part_message) + zmq_msg_size(&part_message);
+            std::vector<int8_t> frame_data (data_array_start, data_array_end);
             // Copy envelop to message
-            Frame part_msg_frame((char*)zmq_msg_data(&part_message),
-                                 zmq_msg_size(&part_message));
+            Frame part_msg_frame(frame_data);
             message.AppendFrame(part_msg_frame);
         }
         // Close message

@@ -85,14 +85,15 @@ public:
     //!
     virtual void* GetRaw();
 
+    //! @brief Method called on Context destruction
+    //!
+    //!
+    //!
+    virtual void ContextCloseCall ();    
+
     //! @brief Copy operator overload.
     //!
     Connection& operator=(const Connection& other) = delete;
-
-    //!
-    virtual void ContextCloseCall ();
-
-    
 
 protected:
 

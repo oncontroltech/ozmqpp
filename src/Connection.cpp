@@ -2,6 +2,7 @@
 
 // ZMQ headers
 #include <zmq.h>
+#include <cstring>
 
 // EXCEPTION headers
 #include "exceptions/InitializationFailed.hh"
@@ -56,13 +57,17 @@ OZMQPP::Connection::SendMessage(const Message& message)
         // Get the raw pointer to message string
         Frame frame = message.GetFrame(i);
         unsigned int frame_information_size = frame.GetFrameMessageSize();
-        // char* frame_information = new char[frame_information_size];
+        
         zmq_msg_t message_struct;
         if (zmq_msg_init_size(&message_struct, frame_information_size) == -1)
         {
             throw InitializationFailed(CLASS_NAME, "SendMessage", zmq_strerror(zmq_errno()));
         }
-        frame.GetFrameInformation(reinterpret_cast<char *>(zmq_msg_data(&message_struct)), frame_information_size);
+        std::vector<int8_t> frame_data = frame.GetFrameData ();
+        // frame.GetFrameInformation(reinterpret_cast<char *>(zmq_msg_data(&message_struct)), frame_information_size);
+        // zmq_msg_data(&message_struct));
+
+        memcpy (zmq_msg_data(&message_struct), frame_data.data(), frame_data.size());
 
         // Check flags for multipart message
         int flags;
@@ -131,8 +136,10 @@ OZMQPP::Connection::ReceiveMessage()
         }
 
         // copy envelop to message
-        Frame part_msg_frame(reinterpret_cast<char*>(zmq_msg_data(&part_message)),
-                             zmq_msg_size(&part_message));
+        Frame part_msg_frame;
+        std::vector<int8_t> frame_raw_data (reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)),
+                                            reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)) + zmq_msg_size(&part_message));
+
         message.AppendFrame(part_msg_frame);
 
         // close message

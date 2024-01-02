@@ -47,8 +47,7 @@ public:
     //! @param message_information Array of bytes representing frame information.
     //! @param message_size size of the number of information bytes.
     //!
-    Frame(const char* message_information,
-          size_t message_size);
+    Frame(const std::vector<int8_t>& frame_data);
 
 
     //! @brief Constructor with initialization by a string (c++ style).
@@ -81,12 +80,6 @@ public:
     //!
     [[nodiscard]] size_t GetFrameMessageSize() const;
 
-    //! @brief Check if the information can be encoded as string.
-    //! 
-    //! @return True if information is valid. False otherwise.
-    //!
-    [[nodiscard]] bool ContainValidString() const;
-
     //! @brief Set frame information in raw data.
     //!
     //! The information will be copied into frame internal containers. The 
@@ -95,8 +88,7 @@ public:
     //! @param message_information raw information array.
     //! @param message_size raw information array size.
     //!
-    void SetFrameInformation(const char* message_information,
-                             size_t message_size);
+    void SetFrameData(const std::vector<int8_t>& frame_data);
 
     //! @brief Retrieve raw data frame information.
     //!
@@ -108,12 +100,10 @@ public:
     //!
     //! number of copied bytes are returned.
     //!
-    //! @param message_information raw information array.
-    //! @param max_size maximum number of bytes which can be copied.
+
     //! @return number of bytes copied to message_information.
     //!
-    unsigned int GetFrameInformation(const char* message_information,
-                                     size_t max_size);
+    std::vector<int8_t> GetFrameData ();
 
     //! @brief Set the envelope characters by std::string.
     //!
@@ -127,7 +117,7 @@ public:
     //!
     [[nodiscard]] std::string GetMessageString() const;
 
-    [[nodiscard]] std::vector<char> GetRawData() const;
+    [[nodiscard]] std::vector<int8_t> GetRawData() const;
 
     //! @brief Copy operator overload.
     //!
@@ -138,27 +128,23 @@ public:
 
 protected:
 
-    //! @brief Erase class memory variables.
-    //!
-    //! The method must check if the information was previously allocated.
-    //!
-    void ClearFrameMemoryContainer();
+    // //! @brief Erase class memory variables.
+    // //!
+    // //! The method must check if the information was previously allocated.
+    // //!
+    // void ClearFrameMemoryContainer();
 
-    //! @brief Allocate memory on frame memory container.
-    //!
-    //! @param alloc_size size to allocate on memory container.
-    //!
-    void AllocateFrameMemorySize(size_t alloc_size);
+    // //! @brief Allocate memory on frame memory container.
+    // //!
+    // //! @param alloc_size size to allocate on memory container.
+    // //!
+    // void AllocateFrameMemorySize(size_t alloc_size);
 
 private:
 
     //! @brief Buffer containing the information contained in the frame.
     //!
-    void* m_message_field;
-
-    //! @brief Stores the size of the message.
-    //!
-    size_t m_message_field_size;
+    std::vector<int8_t> m_frame_data;
 
 }; // class Frame
 

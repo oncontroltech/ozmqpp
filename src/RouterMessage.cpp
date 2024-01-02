@@ -46,9 +46,11 @@ OZMQPP::RouterMessage::GetFrame(unsigned int frame_number) const
 {
     // Special case is present at when frame number is 0
     // the information is from peer connection address
-    if (frame_number== 0)
+    if (frame_number == 0)
     {
-        return Frame(m_peer_id_field, m_peer_id_field_size);
+        std::vector<int8_t> id_array_value (m_peer_id_field, 
+                                          m_peer_id_field + m_peer_id_field_size);
+        return Frame(id_array_value);
     }
     return Message::GetFrame(frame_number - 1);
 }
