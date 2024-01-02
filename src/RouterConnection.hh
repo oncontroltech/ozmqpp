@@ -17,8 +17,9 @@
 #include "Connection.hh"
 #include "RouterMessage.hh"
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 //! @brief Wrap of the connection resources from zeromq with router format.
 //!
 //! Router pattern contain differences dealing with message formats, which
@@ -37,11 +38,11 @@ public:
     //!
     //! @param other object to copy information from.
     //!
-    RouterConnection(RouterConnection& other);
+    RouterConnection(RouterConnection& other) = delete;
 
     //! @brief class destructor.
     //!
-    ~RouterConnection() override = default;
+    ~RouterConnection();
 
     //! @brief Retrieve message from connection with router format.
     //!
@@ -58,12 +59,14 @@ protected:
     //!
     //! @param raw_connection Connection to zeromq connection resource.
     //!
-    explicit RouterConnection(void* zmq_connection);
+    RouterConnection(uint new_connection_id, void* zmq_connection);
 
     //! @brief Friend class used to create default connection objects.
     //!
     friend class Context;
-};
-}
+
+}; // class RouterConnection
+
+} // namespace OZMQPP
 
 #endif // ZMQ_ROUTERCONNECTION_HH

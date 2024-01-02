@@ -16,17 +16,24 @@
 // ZMQ headers
 #include "Exception.hh"
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 class ZMQ_API InvalidContext : public Exception
 {
 public:
-    InvalidContext(const char* class_name,
-                   const char* function_name,
-                   const char* error_msg) noexcept;
+    InvalidContext(const std::string& class_name,
+                   const std::string& function_name,
+                   const std::string& error_msg) noexcept;
     
-    ~InvalidContext() override = default;
-};
-}
+    virtual ~InvalidContext();
+
+protected:
+
+private:
+
+}; // class InvalidContext
+
+} // namespace OZMQPP
 
 #endif // ZMQ_EXCEPTION_INVALID_CONTEXT_HH

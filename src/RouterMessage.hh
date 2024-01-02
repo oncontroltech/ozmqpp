@@ -19,8 +19,9 @@
 // STD headers
 #include <vector>
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 //! @brief Message adapted to ZMQ router message structure.
 //!
 //! The ZMQ router have a different message structure from other request-reply
@@ -48,7 +49,7 @@ public:
 
     //! @brief Class destructor.
     //!
-    ~RouterMessage() override;
+    ~RouterMessage();
 
     //! @brief Get number of frames on message.
     //!
@@ -147,6 +148,8 @@ public:
     //!
     RouterMessage& operator=(const RouterMessage& other);
 
+protected:
+
 private:
     
     //! @brief buffer to contain id information.
@@ -159,7 +162,9 @@ private:
     //! @brief Size of the id field array.
     //!
     unsigned int m_peer_id_field_size;
-};
-}
+
+}; // class 
+
+} // namespace OZMQPP
 
 #endif // ZMQ_ROUTERMESSAGE_HH

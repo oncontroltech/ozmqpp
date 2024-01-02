@@ -11,14 +11,14 @@
 // File const values
 static const char CLASS_NAME[] = "Frame";
 
-ZMQ::Frame::Frame() :
+OZMQPP::Frame::Frame() :
     m_message_field(nullptr),
     m_message_field_size(0)
 {
 
 }
 
-ZMQ::Frame::Frame(const char* message_information,
+OZMQPP::Frame::Frame(const char* message_information,
                   size_t message_size) :
     m_message_field(nullptr),
     m_message_field_size(0)
@@ -26,27 +26,27 @@ ZMQ::Frame::Frame(const char* message_information,
     SetFrameInformation(message_information, message_size);
 }
 
-ZMQ::Frame::Frame(const std::string& message_text) :
+OZMQPP::Frame::Frame(const std::string& message_text) :
     m_message_field(nullptr),
     m_message_field_size(0)
 {
     SetMessageString(message_text);
 }
 
-ZMQ::Frame::Frame(const Frame& other) :
+OZMQPP::Frame::Frame(const Frame& other) :
     m_message_field(other.m_message_field),
     m_message_field_size(other.m_message_field_size)
 {
 
 }
 
-ZMQ::Frame::~Frame()
+OZMQPP::Frame::~Frame()
 {
     ClearFrameMemoryContainer();
 }
 
 bool
-ZMQ::Frame::IsEmpty() const
+OZMQPP::Frame::IsEmpty() const
 {
     if (m_message_field == nullptr)
     {
@@ -56,13 +56,13 @@ ZMQ::Frame::IsEmpty() const
 }
 
 size_t
-ZMQ::Frame::GetFrameMessageSize() const
+OZMQPP::Frame::GetFrameMessageSize() const
 {
     return m_message_field_size;
 }
 
 bool
-ZMQ::Frame::ContainValidString() const
+OZMQPP::Frame::ContainValidString() const
 {
     // Check the existence of the null terminator
     const char* str_end =
@@ -79,7 +79,7 @@ ZMQ::Frame::ContainValidString() const
 }
 
 void
-ZMQ::Frame::SetFrameInformation(const char* message_information,
+OZMQPP::Frame::SetFrameInformation(const char* message_information,
                                 size_t message_size)
 {
     // Allocate space and copy information
@@ -88,7 +88,7 @@ ZMQ::Frame::SetFrameInformation(const char* message_information,
 }
 
 unsigned int
-ZMQ::Frame::GetFrameInformation(const char* message_information,
+OZMQPP::Frame::GetFrameInformation(const char* message_information,
                                 size_t max_size)
 {
     // Check number of bytes to copy
@@ -100,7 +100,7 @@ ZMQ::Frame::GetFrameInformation(const char* message_information,
 }
 
 void
-ZMQ::Frame::SetMessageString(const std::string& message)
+OZMQPP::Frame::SetMessageString(const std::string& message)
 {
     // Check if it needs to be cleared
     if (IsEmpty() == false)
@@ -115,7 +115,7 @@ ZMQ::Frame::SetMessageString(const std::string& message)
 }
 
 std::string
-ZMQ::Frame::GetMessageString() const
+OZMQPP::Frame::GetMessageString() const
 {
     // Check if contain valid string
     if (ContainValidString() != true)
@@ -139,7 +139,7 @@ ZMQ::Frame::GetMessageString() const
 }
 
 std::vector<char>
-ZMQ::Frame::GetRawData() const
+OZMQPP::Frame::GetRawData() const
 {
     // Create a vector with the message inside
     std::vector<char> v(m_message_field_size);
@@ -148,8 +148,8 @@ ZMQ::Frame::GetRawData() const
     return v;
 }
 
-ZMQ::Frame&
-ZMQ::Frame::operator=(const Frame& other)
+OZMQPP::Frame&
+OZMQPP::Frame::operator=(const Frame& other)
 {
     if (this == &other)
     {
@@ -170,7 +170,7 @@ ZMQ::Frame::operator=(const Frame& other)
 }
 
 void
-ZMQ::Frame::ClearFrameMemoryContainer()
+OZMQPP::Frame::ClearFrameMemoryContainer()
 {
     if (m_message_field != nullptr)
     {
@@ -183,7 +183,7 @@ ZMQ::Frame::ClearFrameMemoryContainer()
 }
 
 void
-ZMQ::Frame::AllocateFrameMemorySize(size_t alloc_size)
+OZMQPP::Frame::AllocateFrameMemorySize(size_t alloc_size)
 {
     try {
         // Alloc and check if valid pointer

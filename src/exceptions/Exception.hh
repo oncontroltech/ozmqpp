@@ -17,32 +17,36 @@
 #include <exception>
 #include <string>
 
-namespace ZMQ
+namespace OZMQPP
 {
-class ZMQ_API Exception : public std::exception
+
+class ZMQ_API Exception
 {
 public:
-    Exception(const char* class_name,
-              const char* function_name,
-              const char* error_msg) noexcept;
+    Exception(const std::string& class_name,
+              const std::string& function_name,
+              const std::string& error_msg) noexcept;
     
     Exception(const Exception& other);
 
-    ~Exception() override = default;
+    virtual ~Exception();
 
-    [[nodiscard]] const char* what() const noexcept override;
+    [[nodiscard]] std::string GetClassName() const;
 
-    [[nodiscard]] const char* GetClassName() const;
+    [[nodiscard]] std::string GetFunctionName() const;
 
-    [[nodiscard]] const char* GetFunctionName() const;
+    [[nodiscard]] std::string GetErrorMessage() const;
 
-    [[nodiscard]] const char* GetErrorMessage() const;
+protected:
 
 private:
-    const char* m_class_name;
-    const char* m_function_name;
-    const char* m_error_message;
+    const std::string m_class_name;
+
+    const std::string m_function_name;
+
+    const std::string m_error_message;
 };
+
 }
 
 #endif // ZMQ_EXCEPTION_HH

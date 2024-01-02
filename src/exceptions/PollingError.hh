@@ -16,17 +16,19 @@
 // ZMQ headers
 #include "Exception.hh"
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 class ZMQ_API PollingError : public Exception
 {
 public:
-    PollingError(const char* class_name,
-                 const char* function_name,
-                 const char* error_msg) noexcept;
+    PollingError (const std::string& class_name,
+                  const std::string& function_name,
+                  const std::string& error_msg) noexcept;
     
-    ~PollingError() override = default;
+    virtual ~PollingError();
 };
+
 }
 
 #endif // ZMQ_EXCEPTION_POLLING_ERROR_HH

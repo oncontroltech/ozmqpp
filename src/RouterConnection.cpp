@@ -13,14 +13,10 @@
 // File const values
 static const char CLASS_NAME[] = "RouterConnection";
 
-ZMQ::RouterConnection::RouterConnection(RouterConnection& other) :
-    Connection::Connection(other)
-{
 
-}
 
-ZMQ::RouterMessage
-ZMQ::RouterConnection::ReceiveRouterMessage()
+OZMQPP::RouterMessage
+OZMQPP::RouterConnection::ReceiveRouterMessage()
 {
     
     // Return a pointer to raw zmq connection
@@ -82,8 +78,8 @@ ZMQ::RouterConnection::ReceiveRouterMessage()
 
 }
 
-ZMQ::RouterConnection::RouterConnection(void* zmq_connection) :
-    Connection::Connection(zmq_connection)
+OZMQPP::RouterConnection::RouterConnection(uint new_connection_id, void* zmq_connection) :
+    Connection::Connection(new_connection_id, zmq_connection)
 {
     
 }

@@ -21,9 +21,25 @@
 #include <memory>
 #include <mutex>
 #include <zmq.h>
+#include <map>
 
-namespace ZMQ
+namespace OZMQPP
 {
+    //! @brief Types of socket provided by ZMQ architecture
+    //!
+    enum class SocketType
+    {
+        PUBLISHER,
+        SUBSCRIBER,
+        REQUEST,
+        REPLY,
+        ROUTER,
+        DEALER,
+        PUSH,
+        PULL,
+        PAIR
+    };
+
 //! @brief Wrapper for zeromq context object.
 //!
 //! Context is the base object where connection objects are created, using
@@ -40,32 +56,40 @@ public:
     //!
     //! @param other object to copy information from.
     //!
-    Context(const Context& other);
+    Context(Context& other);
 
     //! @brief Class destructor.
     //!
-    ~Context() = default;
+    ~Context();
 
     //! @brief Create zeromq connection wrapper.
     //!
     //! @param socket_type Type of socket to create.
     //! @return Valid Connection object to be used on communication.
     //!
-    Connection CreateConnection(int socket_type);
+    Connection& CreateConnection(SocketType socket_type);
 
     //! @brief Create zeromq router connection wrapper.
     //!
     //! @param socket_type Type of socket to create.
     //! @return Valid RouterConnection object to be used on communication.
     //!
-    RouterConnection CreateRouterConnection();
+    RouterConnection& CreateRouterConnection();
+
+    //! @brief Erase connection object from ownership list
+    //!
+    //! @param connection_object Object to handle ownership.
+    //!
+    void EraseConnection (uint connection_id);
 
     //! @brief Copy operator overload.
     //!
     //! @param other Object to copy information from.
     //! @return Reference to self.
     //!
-    Context& operator=(const Context& other);
+    Context& operator=(Context& other);
+
+protected:
 
 private:
 
@@ -75,10 +99,24 @@ private:
     //!
     void* m_zmq_context;
 
+    //! @brief Map of connection owned by current context.
+    //!
+    //! The context creates zqm connections, which will be used by applications
+    //! to perform communication actions. The ownership belong to the context,
+    //! which will be responsible to erase them from memory.
+    //!
+    std::map<uint, Connection*> m_connection_map;
+
     //! @brief This mutex protects the creation of the socket.
     //!
     std::mutex m_connection_mutex;
-};
-}
+
+    //! @brief
+    //!
+    uint m_connections_id_counter;
+
+}; // class Context
+
+} // namespace OZMQPP
 
 #endif // ZMQ_CONTEXT_HH_

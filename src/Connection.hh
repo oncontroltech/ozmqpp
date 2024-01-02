@@ -19,14 +19,12 @@
 // STD headers
 #include <memory>
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 // Forward declaration to use as friend
 // Class
 class Context;
-// Function
-class Connection;
-Connection make_invalid_zmqconnection();
 
 //! @brief Wrap of the connection resources from zeromq.
 //!
@@ -37,9 +35,7 @@ public:
 
     //! @brief Copy constructor.
     //!
-    //! @param other Object to copy information from.
-    //!
-    Connection(Connection& other);
+    Connection(const Connection& other) = delete;
 
     //! @brief Class destructor.
     //!
@@ -69,7 +65,7 @@ public:
     //!
     //! @return True if context is valid.
     //!
-    [[nodiscard]] virtual bool IsValid() const;
+    virtual bool IsValid() const;
 
     //! @brief Send zeromq message.
     //!
@@ -91,19 +87,14 @@ public:
 
     //! @brief Copy operator overload.
     //!
-    //! @param other Object to copy information from.
-    //! @return Reference to self.
-    //!
-    Connection& operator=(const Connection& other);
+    Connection& operator=(const Connection& other) = delete;
 
-    Connection& operator=(Connection&& other) noexcept ;
+    //!
+    virtual void ContextCloseCall ();
+
+    
 
 protected:
-    //! @brief Default class constructor.
-    //!
-    //! @param raw_connection Connection to zeromq connection resource.
-    //!
-    explicit Connection (void* zmq_connection);
 
     //! @brief Friend class used to create default connection objects.
     //!
@@ -113,20 +104,31 @@ protected:
     //! @return Invalid Connection.
     //!
     friend class Context;
-    friend Connection make_invalid_zmqconnection();
+
+    //! @brief Default class constructor.
+    //!
+    //! @param raw_connection Connection to zeromq connection resource.
+    //!
+    Connection (uint connection_unique_id, void* raw_zmq_connection);
 
 private:
+
+    //! @brief connection id
+    //!
+    //! The conenction id should be unique inside the context, due to be used
+    //! as indexation number for operations within context.
+    //!
+    uint m_connection_unique_id;
 
     //! @brief Pointer to zeromq raw connection object.
     //!
     //! This context pointer will be used by native zeromq resources.
     //!
-    void* m_zmq_connection;
-};
- 
-//! @brief Make Connection object which is invalid
-//!
-ZMQ_API Connection make_invalid_zmqconnection();
-}
+    void* m_zmq_connection;    
+
+}; // class Connection
+
+
+} // namespace OZMQPP
 
 #endif // ZMQ_CONNECTION_HH

@@ -21,7 +21,7 @@
 // STD headers
 #include <vector>
 
-namespace ZMQ
+namespace OZMQPP
 {
 //! @brief Wrapper for zeromq poll resources.
 //!
@@ -114,7 +114,9 @@ private:
     //! @sa Wait
     //!
     std::vector<zmq_pollitem_t> m_raw_zmqitems;
-};
-}
+
+}; // class Pool
+
+} // namescpace OZMQPP
 
 #endif // ZMQ_POLL_HH

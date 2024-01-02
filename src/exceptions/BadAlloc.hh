@@ -16,17 +16,19 @@
 // ZMQ headers
 #include "Exception.hh"
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 class ZMQ_API BadAlloc : public Exception
 {
 public:
-    BadAlloc(const char* class_name,
-             const char* function_name,
-             const char* error_msg) noexcept;
+    BadAlloc(const std::string& class_name,
+             const std::string& function_name,
+             const std::string& error_msg) noexcept;
     
-    ~BadAlloc() override = default;
+    virtual ~BadAlloc();
 };
+
 }
 
 #endif // ZMQ_EXCEPTION_BAD_ALLOC_HH

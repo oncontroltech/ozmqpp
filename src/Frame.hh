@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace ZMQ
+namespace OZMQPP
 {
 //! @brief zeromq envelope wrapper.
 //!
@@ -159,7 +159,9 @@ private:
     //! @brief Stores the size of the message.
     //!
     size_t m_message_field_size;
-};
-}
+
+}; // class Frame
+
+} // namespace OZMQPP
 
 #endif // ZMQ_FRAME_HH

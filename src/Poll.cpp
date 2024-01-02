@@ -6,20 +6,20 @@
 // File const values
 static const char CLASS_NAME[] = "Poll";
 
-ZMQ::Poll::Poll() :
+OZMQPP::Poll::Poll() :
     m_ids_poll()
 {
 
 }
 
-ZMQ::Poll::Poll(const Poll& other) :
+OZMQPP::Poll::Poll(const Poll& other) :
     m_ids_poll(other.m_ids_poll)
 {
     SynchronizeRaw();
 }
 
 void
-ZMQ::Poll::AddConnection(int id, Connection& connection)
+OZMQPP::Poll::AddConnection(int id, Connection& connection)
 {
     PoolBlock block{
         .id = id,
@@ -31,7 +31,7 @@ ZMQ::Poll::AddConnection(int id, Connection& connection)
 }
 
 void
-ZMQ::Poll::RemoveConnection(int id)
+OZMQPP::Poll::RemoveConnection(int id)
 {
     // Search vector for identifier
     std::vector<Poll::PoolBlock>::iterator iter = m_ids_poll.begin();
@@ -54,7 +54,7 @@ ZMQ::Poll::RemoveConnection(int id)
 }
 
 int
-ZMQ::Poll::Wait()
+OZMQPP::Poll::Wait()
 {
     // Wait for message from zmq framework
     int zmq_error_code = zmq_poll(m_raw_zmqitems.data(), m_ids_poll.size(), -1);
@@ -79,8 +79,8 @@ ZMQ::Poll::Wait()
     return unlocked_id;
 }
 
-ZMQ::Poll&
-ZMQ::Poll::operator=(const Poll& other)
+OZMQPP::Poll&
+OZMQPP::Poll::operator=(const Poll& other)
 {
     if (m_ids_poll != other.m_ids_poll)
     {
@@ -91,7 +91,7 @@ ZMQ::Poll::operator=(const Poll& other)
 }
 
 void
-ZMQ::Poll::SynchronizeRaw()
+OZMQPP::Poll::SynchronizeRaw()
 {
     std::size_t pool_size = m_ids_poll.size();
 

@@ -11,13 +11,7 @@
 // File const values
 static const char CLASS_NAME[] = "Connection";
 
-ZMQ::Connection::Connection(Connection& other) :
-    m_zmq_connection(other.m_zmq_connection)
-{
-    other.m_zmq_connection = nullptr;
-}
-
-ZMQ::Connection::~Connection()
+OZMQPP::Connection::~Connection()
 {
     if (m_zmq_connection != nullptr)
     {
@@ -27,7 +21,7 @@ ZMQ::Connection::~Connection()
 }
 
 void
-ZMQ::Connection::Bind(const std::string& address_string)
+OZMQPP::Connection::Bind(const std::string& address_string)
 {
     int rc = zmq_bind(m_zmq_connection, address_string.c_str());
     if (rc == -1)
@@ -37,7 +31,7 @@ ZMQ::Connection::Bind(const std::string& address_string)
 }
 
 void
-ZMQ::Connection::Connect(const std::string& address_string)
+OZMQPP::Connection::Connect(const std::string& address_string)
 {
     int rc = zmq_connect(m_zmq_connection, address_string.c_str());
     if (rc == -1)
@@ -47,13 +41,13 @@ ZMQ::Connection::Connect(const std::string& address_string)
 }
 
 bool
-ZMQ::Connection::IsValid() const
+OZMQPP::Connection::IsValid() const
 {
     return(m_zmq_connection != nullptr);
 }
 
 void
-ZMQ::Connection::SendMessage(const Message& message)
+OZMQPP::Connection::SendMessage(const Message& message)
 {
     // Check for number envelops to send
     unsigned int number_multiparts = message.Size();
@@ -69,22 +63,6 @@ ZMQ::Connection::SendMessage(const Message& message)
             throw InitializationFailed(CLASS_NAME, "SendMessage", zmq_strerror(zmq_errno()));
         }
         frame.GetFrameInformation(reinterpret_cast<char *>(zmq_msg_data(&message_struct)), frame_information_size);
-        // frame.GetFrameInformation(frame_information, frame_information_size);
-
-        // Copy message string
-        // zmq_msg_t message_struct;
-        // if (zmq_msg_init_size(&message_struct, frame_information_size) == -1)
-        // {
-        //     throw InitializationFailed(CLASS_NAME, "SendMessage", zmq_strerror(zmq_errno()));
-        // }
-        // memmove(zmq_msg_data(&message_struct), 
-        //        frame_information, 
-        //        frame_information_size);
-
-        // // Delete information
-        // delete[] frame_information;
-        // frame_information = nullptr;
-        // frame_information_size = 0;
 
         // Check flags for multipart message
         int flags;
@@ -119,8 +97,8 @@ ZMQ::Connection::SendMessage(const Message& message)
     }
 }
 
-ZMQ::Message
-ZMQ::Connection::ReceiveMessage()
+OZMQPP::Message
+OZMQPP::Connection::ReceiveMessage()
 {
     // retrieve message from zeromq framework
     Message message;
@@ -170,46 +148,20 @@ ZMQ::Connection::ReceiveMessage()
 }
 
 void*
-ZMQ::Connection::GetRaw()
+OZMQPP::Connection::GetRaw()
 {
     return m_zmq_connection;
 }
 
-ZMQ::Connection&
-ZMQ::Connection::operator=(const Connection& other)
+void
+OZMQPP::Connection::ContextCloseCall ()
 {
-    if (this == &other)
-    {
-        return *this;
-    }
-    m_zmq_connection = other.m_zmq_connection;
-    return *this;
+
 }
 
-ZMQ::Connection& 
-ZMQ::Connection::operator=(Connection&& other) noexcept
+OZMQPP::Connection::Connection(uint connection_unique_id, void* raw_zmq_connection) :
+    m_connection_unique_id (connection_unique_id),
+    m_zmq_connection(raw_zmq_connection)
 {
-    if (this == &other)
-    {
-        return *this;
-    }
-    m_zmq_connection = other.m_zmq_connection;
-    other.m_zmq_connection = nullptr;
-    return *this;
-}
 
-ZMQ::Connection::Connection(void* raw_connection) :
-    m_zmq_connection(raw_connection)
-{
-    
 }
-
-ZMQ::Connection
-ZMQ::make_invalid_zmqconnection()
-{
-    // create and assign semaphore resource
-    // The creation of the shared must be with a raw pointer because the class 
-    // does not have public constructor. make_invalid_zmqconnection is friend 
-    // from class.
-    return Connection(nullptr);
-} 

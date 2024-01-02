@@ -10,14 +10,14 @@
 // File const values
 static const char CLASS_NAME[] = "RouterMessage";
 
-ZMQ::RouterMessage::RouterMessage() :
+OZMQPP::RouterMessage::RouterMessage() :
     Message(),
     m_peer_id_field(nullptr),
     m_peer_id_field_size(0)
 {
 }
 
-ZMQ::RouterMessage::RouterMessage(const RouterMessage& other) :
+OZMQPP::RouterMessage::RouterMessage(const RouterMessage& other) :
     Message(),
     m_peer_id_field(nullptr),
     m_peer_id_field_size(0)
@@ -25,7 +25,7 @@ ZMQ::RouterMessage::RouterMessage(const RouterMessage& other) :
     RouterMessage::operator=(other);
 }
 
-ZMQ::RouterMessage::~RouterMessage()
+OZMQPP::RouterMessage::~RouterMessage()
 {
     if (m_peer_id_field != nullptr)
     {
@@ -36,13 +36,13 @@ ZMQ::RouterMessage::~RouterMessage()
 }
 
 unsigned int
-ZMQ::RouterMessage::Size() const
+OZMQPP::RouterMessage::Size() const
 {
     return Message::Size() + 1;
 }
 
-ZMQ::Frame
-ZMQ::RouterMessage::GetFrame(unsigned int frame_number) const
+OZMQPP::Frame
+OZMQPP::RouterMessage::GetFrame(unsigned int frame_number) const
 {
     // Special case is present at when frame number is 0
     // the information is from peer connection address
@@ -54,7 +54,7 @@ ZMQ::RouterMessage::GetFrame(unsigned int frame_number) const
 }
 
 bool
-ZMQ::RouterMessage::IsPeerIDValid() const
+OZMQPP::RouterMessage::IsPeerIDValid() const
 {
     if (m_peer_id_field != nullptr)
     {
@@ -64,7 +64,7 @@ ZMQ::RouterMessage::IsPeerIDValid() const
 }
 
 void
-ZMQ::RouterMessage::SetPeerID(const char* const peer_id, 
+OZMQPP::RouterMessage::SetPeerID(const char* const peer_id, 
                               unsigned int peer_id_size)
 {
     // Check if it's valid
@@ -80,13 +80,13 @@ ZMQ::RouterMessage::SetPeerID(const char* const peer_id,
 }
 
 unsigned int
-ZMQ::RouterMessage::GetPeerIDSize() const
+OZMQPP::RouterMessage::GetPeerIDSize() const
 {
     return m_peer_id_field_size;
 }
 
 unsigned int
-ZMQ::RouterMessage::GetRawPeerID(char* peer_id_field,
+OZMQPP::RouterMessage::GetRawPeerID(char* peer_id_field,
                                  unsigned int max_size) const
 {
     // Check max size to copy
@@ -103,7 +103,7 @@ ZMQ::RouterMessage::GetRawPeerID(char* peer_id_field,
 }
 
 void
-ZMQ::RouterMessage::SetPeerIDVector(const std::vector<char>& peer_id_vector)
+OZMQPP::RouterMessage::SetPeerIDVector(const std::vector<char>& peer_id_vector)
 {
     // Check if data must be cleared
     if (IsEmpty() == false)
@@ -129,7 +129,7 @@ ZMQ::RouterMessage::SetPeerIDVector(const std::vector<char>& peer_id_vector)
 }
 
 std::vector<char>
-ZMQ::RouterMessage::GetPeerIDVector() const
+OZMQPP::RouterMessage::GetPeerIDVector() const
 {
     // Declare return container and record data
     std::vector<char> peer_id_container;
@@ -143,7 +143,7 @@ ZMQ::RouterMessage::GetPeerIDVector() const
 }
 
 void
-ZMQ::RouterMessage::ClearPeerID()
+OZMQPP::RouterMessage::ClearPeerID()
 {
     if (m_peer_id_field != nullptr)
     {
@@ -154,8 +154,8 @@ ZMQ::RouterMessage::ClearPeerID()
     m_peer_id_field_size = 0;
 }
 
-ZMQ::RouterMessage
-ZMQ::RouterMessage::DerivateAnswerMessage() const
+OZMQPP::RouterMessage
+OZMQPP::RouterMessage::DerivateAnswerMessage() const
 {
     // Create and initialize message
     RouterMessage answer_message;
@@ -164,8 +164,8 @@ ZMQ::RouterMessage::DerivateAnswerMessage() const
     return answer_message;
 }
 
-ZMQ::RouterMessage&
-ZMQ::RouterMessage::operator=(const RouterMessage& other)
+OZMQPP::RouterMessage&
+OZMQPP::RouterMessage::operator=(const RouterMessage& other)
 {
     if (this == &other)
     {

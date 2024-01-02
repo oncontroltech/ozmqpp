@@ -19,8 +19,9 @@
 // STD headers
 #include <deque>
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 //! @brief zeromq message container.
 //!
 //! In zeromq, messages is defined has a group of text envelopes. This
@@ -86,6 +87,8 @@ public:
     //!
     Message& operator=(const Message& other);
 
+protected:
+
 private:
     //! @brief constituents message frames.
     //!
@@ -94,7 +97,8 @@ private:
     //!
     std::deque<Frame> m_message_frames;
 
-};
-}
+}; // class Message
+
+} // namespace OZMQPP
 
 #endif // ZMQ_MESSAGE_HH

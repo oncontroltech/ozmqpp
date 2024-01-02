@@ -16,17 +16,24 @@
 // ZMQ headers
 #include "Exception.hh"
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 class ZMQ_API MessageNotReceived : public Exception
 {
 public:
-    MessageNotReceived(const char* class_name,
-                       const char* function_name,
-                       const char* error_msg) noexcept;
+    MessageNotReceived (const std::string& class_name,
+                        const std::string& function_name,
+                        const std::string& error_msg) noexcept;
     
-    ~MessageNotReceived() override = default;
+    virtual ~MessageNotReceived();
+
+protected:
+
+private:
+
 };
+
 }
 
 #endif // ZMQ_EXCEPTION_MESSAGE_NOT_RECEIVED_HH

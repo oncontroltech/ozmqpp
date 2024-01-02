@@ -16,17 +16,19 @@
 // ZMQ headers
 #include "Exception.hh"
 
-namespace ZMQ
+namespace OZMQPP
 {
+
 class ZMQ_API MessageNotSent : public Exception
 {
 public:
-    MessageNotSent(const char* class_name,
-                   const char* function_name,
-                   const char* error_msg) noexcept;
+    MessageNotSent (const std::string& class_name,
+                    const std::string& function_name,
+                    const std::string& error_msg) noexcept;
 
-    ~MessageNotSent() override = default;
+    virtual ~MessageNotSent();
 };
+
 }
 
 #endif // ZMQ_EXCEPTION_MESSAGE_NOT_SENT_HH
