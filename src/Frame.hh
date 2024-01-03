@@ -40,12 +40,9 @@ public:
 
     //! @brief Constructor with copy of raw information.
     //!
-    //! The information is copied, with internal space allocation. The
-    //! message_information contain valid information and must be managed 
-    //! elsewhere.
+    //! The information is copied, with internal space allocation.
     //!
-    //! @param message_information Array of bytes representing frame information.
-    //! @param message_size size of the number of information bytes.
+    //! @param frame_data vector of bytes representing frame information.
     //!
     Frame(const std::vector<int8_t>& frame_data);
 
@@ -74,7 +71,7 @@ public:
     //! 
     [[nodiscard]] bool IsEmpty() const;
 
-    //! @brief Retrieve the information.
+    //! @brief Retrieve the size information.
     //!
     //! @return size of frame information in bytes.
     //!
@@ -93,17 +90,11 @@ public:
     //! @brief Retrieve raw data frame information.
     //!
     //! The information contained in the frame is copied into message_information
-    //! container. It can copy until max_size bytes, but if internal message
-    //! is smaller it will copy only the size of internal message.
+    //! container. 
     //!
-    //! message_information buffer allocation is treated outside the class.
+    //! @return values
     //!
-    //! number of copied bytes are returned.
-    //!
-
-    //! @return number of bytes copied to message_information.
-    //!
-    std::vector<int8_t> GetFrameData ();
+    std::vector<int8_t> GetFrameData () const;
 
     //! @brief Set the envelope characters by std::string.
     //!
@@ -117,8 +108,6 @@ public:
     //!
     [[nodiscard]] std::string GetMessageString() const;
 
-    [[nodiscard]] std::vector<int8_t> GetRawData() const;
-
     //! @brief Copy operator overload.
     //!
     //! @param socket_type type of socket to create.
@@ -128,17 +117,6 @@ public:
 
 protected:
 
-    // //! @brief Erase class memory variables.
-    // //!
-    // //! The method must check if the information was previously allocated.
-    // //!
-    // void ClearFrameMemoryContainer();
-
-    // //! @brief Allocate memory on frame memory container.
-    // //!
-    // //! @param alloc_size size to allocate on memory container.
-    // //!
-    // void AllocateFrameMemorySize(size_t alloc_size);
 
 private:
 

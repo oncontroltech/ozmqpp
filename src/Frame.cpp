@@ -58,7 +58,7 @@ OZMQPP::Frame::SetFrameData(const std::vector<int8_t>& frame_data)
 }
 
 std::vector<int8_t>
-OZMQPP::Frame::GetFrameData()
+OZMQPP::Frame::GetFrameData() const
 {
     return m_frame_data;
 }
@@ -77,12 +77,6 @@ OZMQPP::Frame::GetMessageString() const
 
     // Return string structure
     return data_message;
-}
-
-std::vector<int8_t>
-OZMQPP::Frame::GetRawData() const
-{
-    return m_frame_data;
 }
 
 OZMQPP::Frame&
