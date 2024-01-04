@@ -13,7 +13,8 @@ function(add_test_incl_memcheck name)
             $<TARGET_FILE:${ZMQ_TARGET}>
             libzmq.so)
 
-    # add_test(NAME ${name}_test COMMAND ${name}_test)
+    add_dependencies(${name}_test ${ZMQ_TARGET})
+
     add_test(NAME ${name}_test COMMAND $<TARGET_FILE:${name}_test>)
     add_test(NAME ${name}_memchecked_test
         COMMAND valgrind
@@ -30,11 +31,3 @@ add_test_incl_memcheck(conn_explicit_destroy)
 add_test_incl_memcheck(conn_implicit_destroy)
 add_test_incl_memcheck(conn_tcp)
 add_test_incl_memcheck(multi_frame_transfer)
-
-# Connections management
-#     - connection creation and explicit destruction
-#     - connection creation and implicit destruction
-# Checking data passing in message
-#     - Pass string in first frame and binary in the second
-# TCPIP data passing
-# interprocess data passing
