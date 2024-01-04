@@ -137,8 +137,9 @@ OZMQPP::Connection::ReceiveMessage()
 
         // copy envelop to message
         Frame part_msg_frame;
-        std::vector<int8_t> frame_raw_data (reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)),
-                                            reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)) + zmq_msg_size(&part_message));
+        std::vector<int8_t> frame_raw_data(reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)),
+                                           reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)) + zmq_msg_size(&part_message));
+        part_msg_frame.SetFrameData(frame_raw_data);
 
         message.AppendFrame(part_msg_frame);
 
@@ -161,7 +162,7 @@ OZMQPP::Connection::GetRaw()
 }
 
 void
-OZMQPP::Connection::ContextCloseCall ()
+OZMQPP::Connection::ContextCloseCall()
 {
 
 }

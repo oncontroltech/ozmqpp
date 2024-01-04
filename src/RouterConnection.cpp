@@ -85,3 +85,8 @@ OZMQPP::RouterConnection::RouterConnection(uint new_connection_id, void* zmq_con
 {
     
 }
+
+OZMQPP::RouterConnection::~RouterConnection()
+{
+    
+}

@@ -29,7 +29,7 @@ OZMQPP::RouterMessage::~RouterMessage()
 {
     if (m_peer_id_field != nullptr)
     {
-        free(m_peer_id_field);
+        delete[] m_peer_id_field;
         m_peer_id_field = nullptr;
         m_peer_id_field_size = 0;
     }

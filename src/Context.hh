@@ -67,20 +67,20 @@ public:
     //! @param socket_type Type of socket to create.
     //! @return Valid Connection object to be used on communication.
     //!
-    Connection& CreateConnection(SocketType socket_type);
+    [[nodiscard]] Connection& CreateConnection(SocketType socket_type);
 
     //! @brief Create zeromq router connection wrapper.
     //!
     //! @param socket_type Type of socket to create.
     //! @return Valid RouterConnection object to be used on communication.
     //!
-    RouterConnection& CreateRouterConnection();
+    [[nodiscard]] RouterConnection& CreateRouterConnection();
 
     //! @brief Erase connection object from ownership list
     //!
     //! @param connection_object Object to handle ownership.
     //!
-    void EraseConnection (uint connection_id);
+    void EraseConnection(Connection& connection_ref);
 
     //! @brief Copy operator overload.
     //!

@@ -18,6 +18,11 @@ OZMQPP::Exception::Exception(const Exception& other) :
 {
 }
 
+OZMQPP::Exception::~Exception()
+{
+    
+}
+
 std::string
 OZMQPP::Exception::GetClassName() const
 {

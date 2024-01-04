@@ -10,7 +10,8 @@
 static const char CLASS_NAME[] = "Context";
 
 OZMQPP::Context::Context() :
-    m_connection_mutex()
+    m_connection_mutex(),
+    m_connections_id_counter(0)
 {
     // Create raw zmq context
     m_zmq_context = zmq_ctx_new();
@@ -25,7 +26,7 @@ OZMQPP::Context::Context() :
 OZMQPP::Context::Context(Context& other) :
     m_zmq_context(other.m_zmq_context),
     m_connection_mutex(),
-    m_connections_id_counter (0)
+    m_connections_id_counter(other.m_connections_id_counter)
 {
     // context ownership is given to current class on copy
     other.m_zmq_context = nullptr;
@@ -35,10 +36,12 @@ OZMQPP::Context::~Context()
 {
     if (m_zmq_context != nullptr)
     {
-        for ( const auto& [ k, v ] : m_connection_map )
+        for (auto map_it = m_connection_map.begin(); map_it != m_connection_map.end(); ++map_it)
         {
-            v->ContextCloseCall ();
+            map_it->second->ContextCloseCall();
+            delete map_it->second;
         }
+        m_connection_map.clear();
 
         zmq_ctx_destroy(m_zmq_context);
         m_zmq_context = nullptr;
@@ -119,14 +122,17 @@ OZMQPP::Context::CreateRouterConnection()
 }
 
 void
-OZMQPP::Context::EraseConnection (uint connection_id)
+OZMQPP::Context::EraseConnection(Connection& connection_ref)
 {
-    std::map<uint, Connection*>::iterator iter = m_connection_map.find (connection_id);
-    if (iter != m_connection_map.end())
+    for (auto map_it = m_connection_map.begin(); map_it != m_connection_map.end(); ++map_it)
     {
-        m_connection_map.erase(connection_id);
+        if (map_it->second->GetRaw() == connection_ref.GetRaw())
+        {
+            delete map_it->second;
+            m_connection_map.erase(map_it);
+            break;
+        }
     }
-
 }
 
 OZMQPP::Context&

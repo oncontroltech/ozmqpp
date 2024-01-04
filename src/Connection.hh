@@ -89,7 +89,7 @@ public:
     //!
     //!
     //!
-    virtual void ContextCloseCall ();    
+    virtual void ContextCloseCall();    
 
     //! @brief Copy operator overload.
     //!
