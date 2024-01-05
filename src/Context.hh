@@ -27,17 +27,17 @@ namespace OZMQPP
 {
     //! @brief Types of socket provided by ZMQ architecture
     //!
-    enum class SocketType
+    enum SocketType : uint8_t
     {
-        PUBLISHER,
-        SUBSCRIBER,
-        REQUEST,
-        REPLY,
-        ROUTER,
-        DEALER,
-        PUSH,
-        PULL,
-        PAIR
+        PUBLISHER = ZMQ_PUB,
+        SUBSCRIBER = ZMQ_SUB,
+        REQUEST = ZMQ_REQ,
+        REPLY = ZMQ_REP,
+        ROUTER = ZMQ_ROUTER,
+        DEALER = ZMQ_DEALER,
+        PUSH = ZMQ_PUSH,
+        PULL = ZMQ_PULL,
+        PAIR = ZMQ_PAIR
     };
 
 //! @brief Wrapper for zeromq context object.

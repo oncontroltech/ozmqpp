@@ -57,41 +57,8 @@ OZMQPP::Context::CreateConnection(SocketType socket_type)
         throw InvalidContext(CLASS_NAME, "CreateConnection", "Context not valid");
     }
 
-    // convert socket type to c style zmq library resources
-    int c_socket_type = -1;
-    switch (socket_type)
-    {
-    case SocketType::PUBLISHER:
-        c_socket_type = ZMQ_PUB;
-        break;
-    case SocketType::SUBSCRIBER:
-        c_socket_type = ZMQ_SUB;
-        break;
-    case SocketType::REQUEST:
-        c_socket_type = ZMQ_REQ;
-        break;
-    case SocketType::REPLY:
-        c_socket_type = ZMQ_REP;
-        break;
-    case SocketType::ROUTER:
-        c_socket_type = ZMQ_ROUTER;
-        break;
-    case SocketType::DEALER:
-        c_socket_type = ZMQ_DEALER;
-        break;
-    case SocketType::PUSH:
-        c_socket_type = ZMQ_PUSH;
-        break;
-    case SocketType::PULL:
-        c_socket_type = ZMQ_PULL;
-        break;
-    case SocketType::PAIR:
-        c_socket_type = ZMQ_PAIR;
-        break;
-    }
-
     m_connection_mutex.lock();
-    void* connection = zmq_socket(m_zmq_context, c_socket_type);
+    void* connection = zmq_socket(m_zmq_context, socket_type);
     m_connection_mutex.unlock();
 
     uint new_connection_id = m_connections_id_counter;

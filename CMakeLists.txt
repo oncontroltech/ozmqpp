@@ -35,6 +35,10 @@ target_compile_options(${ZMQ_TARGET}
         -Wextra
         -Wpedantic)
 
+target_link_libraries(${ZMQ_TARGET}
+    PUBLIC
+        zmq)
+
 add_subdirectory(src)
 
 add_subdirectory(tests)
