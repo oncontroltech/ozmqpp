@@ -89,7 +89,7 @@ public:
     //!
     //!
     //!
-    virtual void ContextCloseCall();    
+    virtual void ContextCloseCall();
 
     //! @brief Copy operator overload.
     //!
@@ -111,6 +111,8 @@ protected:
     //! @param raw_connection Connection to zeromq connection resource.
     //!
     Connection (uint connection_unique_id, void* raw_zmq_connection);
+
+    uint GetUniqueID() const;
 
 private:
 

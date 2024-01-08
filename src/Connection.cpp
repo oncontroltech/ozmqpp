@@ -173,3 +173,9 @@ OZMQPP::Connection::Connection(uint connection_unique_id, void* raw_zmq_connecti
 {
 
 }
+
+uint
+OZMQPP::Connection::GetUniqueID() const
+{
+    return m_connection_unique_id;
+}
