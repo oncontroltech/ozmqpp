@@ -161,6 +161,12 @@ OZMQPP::Connection::GetRaw()
     return m_zmq_connection;
 }
 
+uint
+OZMQPP::Connection::GetUniqueID() const
+{
+    return m_connection_unique_id;
+}
+
 void
 OZMQPP::Connection::ContextCloseCall()
 {
@@ -172,10 +178,4 @@ OZMQPP::Connection::Connection(uint connection_unique_id, void* raw_zmq_connecti
     m_zmq_connection(raw_zmq_connection)
 {
 
-}
-
-uint
-OZMQPP::Connection::GetUniqueID() const
-{
-    return m_connection_unique_id;
 }

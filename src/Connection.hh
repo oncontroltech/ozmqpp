@@ -85,6 +85,12 @@ public:
     //!
     virtual void* GetRaw();
 
+    //! @brief Get unique identifier of this connection in the context
+    //!
+    //! @return ID of the connection inside the context it was created
+    //!
+    uint GetUniqueID() const;
+
     //! @brief Method called on Context destruction
     //!
     //!
@@ -111,8 +117,6 @@ protected:
     //! @param raw_connection Connection to zeromq connection resource.
     //!
     Connection (uint connection_unique_id, void* raw_zmq_connection);
-
-    uint GetUniqueID() const;
 
 private:
 
