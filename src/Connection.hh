@@ -37,6 +37,10 @@ public:
     //!
     Connection(const Connection& other) = delete;
 
+    //! @brief Move constructor.
+    //!
+    Connection(Connection&& other);
+
     //! @brief Class destructor.
     //!
     //! Check if contains valid raw zeromq resources to de-allocate.
@@ -100,6 +104,10 @@ public:
     //! @brief Copy operator overload.
     //!
     Connection& operator=(const Connection& other) = delete;
+
+    //! @brief Move operator overload.
+    //!
+    Connection& operator=(Connection&& other);
 
 protected:
 

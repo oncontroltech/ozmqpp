@@ -12,6 +12,13 @@
 // File const values
 static const char CLASS_NAME[] = "Connection";
 
+OZMQPP::Connection::Connection(Connection&& other) :
+    m_connection_unique_id(other.m_connection_unique_id),
+    m_zmq_connection(other.m_zmq_connection)
+{
+    other.m_zmq_connection = nullptr;
+}
+
 OZMQPP::Connection::~Connection()
 {
     if (m_zmq_connection != nullptr)
@@ -171,6 +178,15 @@ void
 OZMQPP::Connection::ContextCloseCall()
 {
 
+}
+
+OZMQPP::Connection&
+OZMQPP::Connection::operator=(Connection&& other)
+{
+    m_connection_unique_id = other.m_connection_unique_id;
+    m_zmq_connection = other.m_zmq_connection;
+    other.m_zmq_connection = nullptr;
+    return *this;
 }
 
 OZMQPP::Connection::Connection(uint connection_unique_id, void* raw_zmq_connection) :
