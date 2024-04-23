@@ -1,5 +1,4 @@
-
-#include "PollingError.hh"
+#include "exceptions/PollingError.hh"
 
 OZMQPP::PollingError::PollingError (const std::string& class_name,
                                     const std::string& function_name,

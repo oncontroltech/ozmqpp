@@ -3,13 +3,13 @@ message(STATUS "Configuring ZeroMQ")
 
 # Add the source files to the lib
 target_sources(${ZMQ_TARGET}
-                    PRIVATE
-                        Connection.cpp Connection.hh
-                        Context.cpp Context.hh
-                        Frame.cpp Frame.hh
-                        Message.cpp Message.hh
-                        Poll.cpp Poll.hh
-                        RouterConnection.cpp RouterConnection.hh
-                        RouterMessage.cpp RouterMessage.hh)
+    PRIVATE
+        Connection.cpp
+        Context.cpp
+        Frame.cpp
+        Message.cpp
+        Poll.cpp
+        RouterConnection.cpp
+        RouterMessage.cpp)
 
 add_subdirectory(exceptions)

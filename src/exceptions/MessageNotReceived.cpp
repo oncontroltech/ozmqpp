@@ -1,4 +1,4 @@
-#include "MessageNotReceived.hh"
+#include "exceptions/MessageNotReceived.hh"
 
 
 OZMQPP::MessageNotReceived::MessageNotReceived(const std::string& class_name,

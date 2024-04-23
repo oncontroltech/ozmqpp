@@ -1,5 +1,4 @@
-
-#include "InitializationFailed.hh"
+#include "exceptions/InitializationFailed.hh"
 
 OZMQPP::InitializationFailed::InitializationFailed (const std::string& class_name,
                                                     const std::string& function_name,

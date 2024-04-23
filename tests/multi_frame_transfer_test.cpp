@@ -1,7 +1,7 @@
 // OZMQPP headers
-#include <Context.hh>
-#include <Connection.hh>
-#include <Poll.hh>
+#include <ozmqpp/Context.hh>
+#include <ozmqpp/Connection.hh>
+#include <ozmqpp/Poll.hh>
 
 // STD headers
 #include <thread>

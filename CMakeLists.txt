@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.23)
 
 enable_testing()
 
@@ -8,10 +8,10 @@ set (CMAKE_CXX_STANDARD 20
 set (CMAKE_VERBOSE_MAKEFILE ON
     CACHE BOOL "Show makefiles commands on build")
 
-project(ZeroMQ)
-
 set (ZMQ_TARGET "ozmqpp"
-        CACHE STRING "ZeroMQ target name")
+    CACHE STRING "ZeroMQ target name")
+
+project(${ZMQ_TARGET})
 
 if (STATIC_LIBRARY EQUAL ON)
     message(STATUS "Build: Static")
@@ -35,32 +35,45 @@ target_compile_options(${ZMQ_TARGET}
         -Wextra
         -Wpedantic)
 
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        ./include/ozmqpp
+)
+
+add_subdirectory(deps)
+
 target_link_libraries(${ZMQ_TARGET}
     PUBLIC
         zmq)
 
+add_subdirectory(include/ozmqpp)
 add_subdirectory(src)
 
 add_subdirectory(tests)
 
+###
+# INSTALL
+###
+
+include(GNUInstallDirs)
+
 install(
     TARGETS ${ZMQ_TARGET}
     EXPORT "${ZMQ_TARGET}Config"
-    DESTINATION lib
-    INCLUDES DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    COMPONENT ${ZMQ_TARGET}
+    FILE_SET HEADERS)
 
 install(EXPORT "${ZMQ_TARGET}Config"
         FILE "${ZMQ_TARGET}Config.cmake"
         NAMESPACE ${ZMQ_TARGET}::
         DESTINATION cmake)
 
-install(
-    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-    DESTINATION include/${ZMQ_TARGET}
-    FILES_MATCHING
-    PATTERN "*.hh")
-
-# uninstall target
+# Add uninstall target
 if(NOT TARGET uninstall)
   configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"

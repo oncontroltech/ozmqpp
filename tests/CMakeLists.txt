@@ -7,11 +7,10 @@ function(add_test_incl_memcheck name)
     add_executable(${name}_test ${name}_test.cpp)
     target_include_directories(${name}_test
         PRIVATE
-            ../src)
+            ../include)
     target_link_libraries(${name}_test
         PRIVATE
-            $<TARGET_FILE:${ZMQ_TARGET}>
-            libzmq.so)
+            ozmqpp)
 
     add_dependencies(${name}_test ${ZMQ_TARGET})
 
