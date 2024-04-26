@@ -1,4 +1,4 @@
-#include "exceptions/MessageNotSent.hh"
+#include "ozmqpp/exceptions/MessageNotSent.hh"
 
 OZMQPP::MessageNotSent::MessageNotSent (const std::string& class_name,
                                         const std::string& function_name,

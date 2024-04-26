@@ -1,4 +1,4 @@
-#include "Message.hh"
+#include "ozmqpp/Message.hh"
 
 OZMQPP::Message::Message() :
     m_message_frames()

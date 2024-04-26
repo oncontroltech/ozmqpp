@@ -1,10 +1,10 @@
-#include "Context.hh"
+#include "ozmqpp/Context.hh"
 
 // ZMQ headers
 #include <zmq.h>
 
 // EXCEPTION headers
-#include "exceptions/InvalidContext.hh"
+#include "ozmqpp/exceptions/InvalidContext.hh"
 
 // File const values
 static const char CLASS_NAME[] = "Context";

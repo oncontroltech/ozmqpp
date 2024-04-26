@@ -1,13 +1,13 @@
-#include "Connection.hh"
+#include "ozmqpp/Connection.hh"
 
 // ZMQ headers
 #include <zmq.h>
 #include <cstring>
 
 // EXCEPTION headers
-#include "exceptions/InitializationFailed.hh"
-#include "exceptions/MessageNotReceived.hh"
-#include "exceptions/MessageNotSent.hh"
+#include "ozmqpp/exceptions/InitializationFailed.hh"
+#include "ozmqpp/exceptions/MessageNotReceived.hh"
+#include "ozmqpp/exceptions/MessageNotSent.hh"
 
 // File const values
 static const char CLASS_NAME[] = "Connection";

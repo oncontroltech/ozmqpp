@@ -1,7 +1,7 @@
-#include "Poll.hh"
+#include "ozmqpp/Poll.hh"
 
 // EXCEPTION headers
-#include "exceptions/PollingError.hh"
+#include "ozmqpp/exceptions/PollingError.hh"
 
 // File const values
 static const char CLASS_NAME[] = "Poll";

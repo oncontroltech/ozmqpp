@@ -1,4 +1,4 @@
-#include "exceptions/BadAlloc.hh"
+#include "ozmqpp/exceptions/BadAlloc.hh"
 
 OZMQPP::BadAlloc::BadAlloc(const std::string& class_name,
                         const std::string& function_name,

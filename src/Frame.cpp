@@ -1,12 +1,12 @@
-#include "Frame.hh"
+#include "ozmqpp/Frame.hh"
 
 // STD headers
 #include <cstring>
 #include <algorithm>
 
 // EXCEPTION headers
-#include "exceptions/BadAlloc.hh"
-#include "exceptions/InitializationFailed.hh"
+#include "ozmqpp/exceptions/BadAlloc.hh"
+#include "ozmqpp/exceptions/InitializationFailed.hh"
 
 // File const values
 static const char CLASS_NAME[] = "Frame";

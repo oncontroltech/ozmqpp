@@ -1,4 +1,4 @@
-#include "exceptions/InvalidContext.hh"
+#include "ozmqpp/exceptions/InvalidContext.hh"
 
 OZMQPP::InvalidContext::InvalidContext (const std::string& class_name,
                                      const std::string& function_name,

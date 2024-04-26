@@ -1,7 +1,7 @@
-#include "RouterMessage.hh"
+#include "ozmqpp/RouterMessage.hh"
 
 // EXCEPTION headers
-#include "exceptions/BadAlloc.hh"
+#include "ozmqpp/exceptions/BadAlloc.hh"
 
 // STD headers
 #include <algorithm>

@@ -1,4 +1,4 @@
-#include "exceptions/Exception.hh"
+#include "ozmqpp/exceptions/Exception.hh"
 
 OZMQPP::Exception::Exception(const std::string& class_name,
                           const std::string& function_name,

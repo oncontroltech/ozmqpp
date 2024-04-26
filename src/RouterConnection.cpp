@@ -1,19 +1,17 @@
-#include "RouterConnection.hh"
+#include "ozmqpp/RouterConnection.hh"
 
 // ZMQ headers
 #include <zmq.h>
 
 // EXCEPTION headers
-#include "exceptions/InitializationFailed.hh"
-#include "exceptions/MessageNotReceived.hh"
+#include "ozmqpp/exceptions/InitializationFailed.hh"
+#include "ozmqpp/exceptions/MessageNotReceived.hh"
 
 // STD headers
 #include <cstring>
 
 // File const values
 static const char CLASS_NAME[] = "RouterConnection";
-
-
 
 OZMQPP::RouterMessage
 OZMQPP::RouterConnection::ReceiveRouterMessage()
