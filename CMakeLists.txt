@@ -140,7 +140,7 @@ install(TARGETS ${ZMQ_TARGET}
 install(EXPORT "${ZMQ_TARGET}Config"
     FILE "${ZMQ_TARGET}Config.cmake"
     NAMESPACE ${ZMQ_TARGET}::
-    DESTINATION cmake
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake
 )
 
 # Add uninstall target
