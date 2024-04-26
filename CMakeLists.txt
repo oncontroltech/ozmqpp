@@ -31,18 +31,10 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions("DEBUG")
     target_compile_options(${ZMQ_TARGET}
         PRIVATE
-            # Enable memory errors detection
-            -fsanitize=address
             # Increased reliability of backtraces
             -fasynchronous-unwind-tables
             # Store compiler flags in debugging information
             -grecord-gcc-switches
-    )
-
-    target_link_options(${ZMQ_TARGET}
-        PRIVATE
-            # Enable memory errors detection
-            -fsanitize=address
     )
 
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
