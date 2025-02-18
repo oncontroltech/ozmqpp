@@ -168,7 +168,7 @@ OZMQPP::Connection::GetRaw()
     return m_zmq_connection;
 }
 
-uint
+unsigned int
 OZMQPP::Connection::GetUniqueID() const
 {
     return m_connection_unique_id;
@@ -189,7 +189,7 @@ OZMQPP::Connection::operator=(Connection&& other)
     return *this;
 }
 
-OZMQPP::Connection::Connection(uint connection_unique_id, void* raw_zmq_connection) :
+OZMQPP::Connection::Connection(unsigned int connection_unique_id, void* raw_zmq_connection) :
     m_connection_unique_id (connection_unique_id),
     m_zmq_connection(raw_zmq_connection)
 {
