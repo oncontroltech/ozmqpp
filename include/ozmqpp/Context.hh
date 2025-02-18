@@ -105,7 +105,7 @@ private:
     //! to perform communication actions. The ownership belong to the context,
     //! which will be responsible to erase them from memory.
     //!
-    std::map<uint, Connection*> m_connection_map;
+    std::map<unsigned int, Connection*> m_connection_map;
 
     //! @brief This mutex protects the creation of the socket.
     //!
@@ -113,7 +113,7 @@ private:
 
     //! @brief
     //!
-    uint m_connections_id_counter;
+    unsigned int m_connections_id_counter;
 
 }; // class Context
 
