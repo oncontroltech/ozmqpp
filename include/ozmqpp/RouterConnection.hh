@@ -59,7 +59,7 @@ protected:
     //!
     //! @param raw_connection Connection to zeromq connection resource.
     //!
-    RouterConnection(uint new_connection_id, void* zmq_connection);
+    RouterConnection(unsigned int new_connection_id, void* zmq_connection);
 
     //! @brief Friend class used to create default connection objects.
     //!
