@@ -11,3 +11,8 @@ FetchContent_Declare(
 add_dependencies(${ZMQ_TARGET} libzmq)
 
 FetchContent_MakeAvailable(libzmq)
+
+get_target_property(ZMQ_INCLUDE_DIRS libzmq INTERFACE_INCLUDE_DIRECTORIES)
+if(ZMQ_INCLUDE_DIRS)
+	target_include_directories(${ZMQ_TARGET} PUBLIC ${ZMQ_INCLUDE_DIRS})
+endif()
