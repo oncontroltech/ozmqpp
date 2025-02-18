@@ -27,67 +27,70 @@ endif()
 
 message(STATUS "Configuration type: ${CMAKE_BUILD_TYPE}")
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_definitions("DEBUG")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
+    CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_definitions("DEBUG")
+        target_compile_options(${ZMQ_TARGET}
+            PRIVATE
+                # Increased reliability of backtraces
+                -fasynchronous-unwind-tables
+                # Store compiler flags in debugging information
+                -grecord-gcc-switches
+        )
+    
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
+        target_compile_options(${ZMQ_TARGET}
+            PRIVATE
+                # Optimizations
+                -O3
+                # Run-time buffer overflow detection
+                -D_FORTIFY_SOURCE=2
+        )
+        
+        # Check and enable LTO support if possible
+        include(CheckIPOSupported)
+        check_ipo_supported(RESULT supported OUTPUT error)
+        if (supported)
+            message(STATUS "IPO / LTO support: enabled")
+            set_property(TARGET ${ZMQ_TARGET} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+        else()
+            message(STATUS "IPO / LTO support: disabled (<${error}>)")
+        endif()
+    endif()
+    
+    # Add extra flags to the compiler
     target_compile_options(${ZMQ_TARGET}
         PRIVATE
-            # Increased reliability of backtraces
-            -fasynchronous-unwind-tables
-            # Store compiler flags in debugging information
-            -grecord-gcc-switches
-    )
-
-elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(${ZMQ_TARGET}
-        PRIVATE
-            # Optimizations
-            -O3
-            # Run-time buffer overflow detection
-            -D_FORTIFY_SOURCE=2
+            -Werror
+            -Wall
+            -Wextra
+            -Wpedantic
+            # Run-time bounds checking for C++ strings and containers
+            -D_GLIBCXX_ASSERTIONS
+            # Enable table-based thread cancellation
+            -fexceptions
+            # No text relocations for shared libraries
+            -fpic
+            # Increased reliability of stack overflow detection
+            -fstack-clash-protection
+            # Stack smashing protector
+            -fstack-protector-strong
+            # Detect and reject underlinking
+            -Wl,-z,defs
+            # Disable lazy binding
+            -Wl,-z,now
+            # Read-only segments after relocation
+            -Wl,-z,relro
     )
     
-    # Check and enable LTO support if possible
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT supported OUTPUT error)
-    if (supported)
-        message(STATUS "IPO / LTO support: enabled")
-        set_property(TARGET ${ZMQ_TARGET} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-    else()
-        message(STATUS "IPO / LTO support: disabled (<${error}>)")
-    endif()
-endif()
-
-# Add extra flags to the compiler
-target_compile_options(${ZMQ_TARGET}
-    PRIVATE
-        -Werror
-        -Wall
-        -Wextra
-        -Wpedantic
-        # Run-time bounds checking for C++ strings and containers
-        -D_GLIBCXX_ASSERTIONS
-        # Enable table-based thread cancellation
-        -fexceptions
-        # No text relocations for shared libraries
-        -fpic
-        # Increased reliability of stack overflow detection
-        -fstack-clash-protection
-        # Stack smashing protector
-        -fstack-protector-strong
-        # Detect and reject underlinking
-        -Wl,-z,defs
-        # Disable lazy binding
-        -Wl,-z,now
-        # Read-only segments after relocation
-        -Wl,-z,relro
-)
-
-if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "64Bit")
-    target_compile_options(${ZMQ_TARGET}
-        PRIVATE
-            # Control flow integrity protection
-            -fcf-protection
-    )
+    if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "64Bit")
+        target_compile_options(${ZMQ_TARGET}
+            PRIVATE
+                # Control flow integrity protection
+                -fcf-protection
+        )
+    endif ()
 endif ()
 
 target_include_directories(${ZMQ_TARGET}
