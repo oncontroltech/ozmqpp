@@ -100,11 +100,6 @@ target_include_directories(${ZMQ_TARGET}
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
 )
 
-target_link_libraries(${ZMQ_TARGET}
-    PUBLIC
-        zmq
-)
-
 target_compile_definitions(${ZMQ_TARGET}
     PRIVATE
         ZMQ_BUILD
