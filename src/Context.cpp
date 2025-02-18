@@ -61,7 +61,7 @@ OZMQPP::Context::CreateConnection(SocketType socket_type)
     void* connection = zmq_socket(m_zmq_context, socket_type);
     m_connection_mutex.unlock();
 
-    uint new_connection_id = m_connections_id_counter;
+    unsigned int new_connection_id = m_connections_id_counter;
     Connection* connection_ptr = new Connection(new_connection_id, connection);
     m_connection_map.insert(std::pair(new_connection_id, connection_ptr));
     ++m_connections_id_counter;
@@ -80,7 +80,7 @@ OZMQPP::Context::CreateRouterConnection()
     void* connection = zmq_socket(m_zmq_context, ZMQ_ROUTER);
     m_connection_mutex.unlock();
 
-    uint new_connection_id = m_connections_id_counter;
+    unsigned int new_connection_id = m_connections_id_counter;
     RouterConnection* connection_ptr = new RouterConnection(new_connection_id, connection);
     m_connection_map.insert(std::pair(new_connection_id, connection_ptr));
     ++m_connections_id_counter;
