@@ -93,7 +93,7 @@ public:
     //!
     //! @return ID of the connection inside the context it was created
     //!
-    uint GetUniqueID() const;
+    unsigned int GetUniqueID() const;
 
     //! @brief Method called on Context destruction
     //!
@@ -124,7 +124,7 @@ protected:
     //!
     //! @param raw_connection Connection to zeromq connection resource.
     //!
-    Connection (uint connection_unique_id, void* raw_zmq_connection);
+    Connection (unsigned int connection_unique_id, void* raw_zmq_connection);
 
 private:
 
@@ -133,7 +133,7 @@ private:
     //! The conenction id should be unique inside the context, due to be used
     //! as indexation number for operations within context.
     //!
-    uint m_connection_unique_id;
+    unsigned int m_connection_unique_id;
 
     //! @brief Pointer to zeromq raw connection object.
     //!
