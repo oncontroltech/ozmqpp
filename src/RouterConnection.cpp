@@ -78,7 +78,7 @@ OZMQPP::RouterConnection::ReceiveRouterMessage()
 
 }
 
-OZMQPP::RouterConnection::RouterConnection(uint new_connection_id, void* zmq_connection) :
+OZMQPP::RouterConnection::RouterConnection(unsigned int new_connection_id, void* zmq_connection) :
     Connection::Connection(new_connection_id, zmq_connection)
 {
     
