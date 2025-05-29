@@ -44,6 +44,7 @@ function(add_test_incl_memcheck name)
                 $<TARGET_FILE:${name}_test>
             WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
         )
+    endif ()
 endfunction()
 
 add_test_incl_memcheck(conn_explicit_destroy)
