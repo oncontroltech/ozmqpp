@@ -1,6 +1,13 @@
 option(OZMQPP_TESTS "Build tests for ozmqpp" OFF)
 
 if (OZMQPP_TESTS)
+    if(WIN32)
+        set(DRMEM_EXECUTABLE "C:/Program Files (x86)/Dr. Memory/bin/drmemory.exe" CACHE FILEPATH "Path to Dr. Memory executable")
+    endif()
+    if(WIN32 AND NOT EXISTS "${DRMEM_EXECUTABLE}")
+        message(FATAL_ERROR "Dr. Memory not found at: ${DRMEM_EXECUTABLE}. Please set DRMEM_EXECUTABLE correctly.")
+    endif()
+
     enable_testing()
 
     include(CTest)
