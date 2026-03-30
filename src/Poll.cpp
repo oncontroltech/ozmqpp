@@ -35,6 +35,12 @@ OZMQPP::Poll::RemoveConnection(int id)
 {
     // Search vector for identifier
     std::vector<Poll::PoolBlock>::iterator iter = m_ids_poll.begin();
+    // If not found
+    if (iter == m_ids_poll.end())
+    {
+        throw PollingError(CLASS_NAME, "RemoveConnection", "Invalid poll id");
+    }
+
     for (; iter != m_ids_poll.end(); ++iter)
     {
         if (iter->id == id)
@@ -45,11 +51,6 @@ OZMQPP::Poll::RemoveConnection(int id)
         }
     }
 
-    // If not found
-    if (iter == m_ids_poll.end())
-    {
-        throw PollingError(CLASS_NAME, "RemoveConnection", "Invalid poll id");
-    }
     SynchronizeRaw();
 }
 
