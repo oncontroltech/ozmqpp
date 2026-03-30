@@ -15,6 +15,8 @@ set(ZMQ_TARGET "ozmqpp"
 
 project(${ZMQ_TARGET})
 
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+
 if (BUILDS_SHARED_LIBS EQUAL ON)
     message(STATUS "Build: Shared")
 else()
@@ -146,8 +148,6 @@ else ()
             PRIVATE
                 # GCC debug information for GDB
                 -ggdb
-                # Run-time buffer overflow detection
-                -D_FORTIFY_SOURCE=2
                 # Run-time bounds checking for C++ strings and containers
                 -D_GLIBCXX_ASSERTIONS
                 # Increased reliability of stack overflow detection
@@ -163,6 +163,8 @@ else ()
     elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
         target_compile_options(${ZMQ_TARGET}
             PRIVATE
+                # Run-time buffer overflow detection
+                -D_FORTIFY_SOURCE=2
                 # Eliminate function call overhead
                 -finline-functions
                 # Reduce loop iterations
