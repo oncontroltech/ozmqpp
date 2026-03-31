@@ -177,6 +177,7 @@ endif()
 target_include_directories(${ZMQ_TARGET}
     PUBLIC
         $<INSTALL_INTERFACE:include>
+    PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
 )
 
@@ -198,7 +199,7 @@ add_subdirectory(tests)
 
 include(GNUInstallDirs)
 
-install(TARGETS ${ZMQ_TARGET} libzmq
+install(TARGETS ${ZMQ_TARGET}
     EXPORT "${ZMQ_TARGET}Config"
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
