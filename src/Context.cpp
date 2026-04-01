@@ -7,7 +7,7 @@
 #include "ozmqpp/exceptions/InvalidContext.hh"
 
 // File const values
-static const char CLASS_NAME[] = "Context";
+static constexpr char CLASS_NAME[] = "Context";
 
 OZMQPP::Context::Context() :
     m_connection_mutex(),
@@ -49,7 +49,7 @@ OZMQPP::Context::~Context()
 }
 
 OZMQPP::Connection&
-OZMQPP::Context::CreateConnection(SocketType socket_type)
+OZMQPP::Context::CreateConnection(const SocketType socket_type)
 {
     // check for valid context to create connections
     if (m_zmq_context == nullptr)

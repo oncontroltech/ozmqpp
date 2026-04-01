@@ -59,14 +59,14 @@ public:
     //!
     //! @return Number of frames in the message.
     //!
-    [[nodiscard]] virtual unsigned int Size() const;
+    [[nodiscard]] virtual std::size_t Size() const;
 
     //! @brief Get frame by number.
     //!
     //! @param frame_number ID of the frame to send.
     //! @return Frame with the information to send.
     //!
-    [[nodiscard]] virtual Frame GetFrame(unsigned int frame_number) const;
+    [[nodiscard]] virtual Frame GetFrame(const std::size_t frame_number) const;
 
     //! @brief Check if message has no envelopes.
     //!

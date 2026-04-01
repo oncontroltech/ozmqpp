@@ -10,7 +10,7 @@
 #include "ozmqpp/exceptions/MessageNotSent.hh"
 
 // File const values
-static const char CLASS_NAME[] = "Connection";
+static constexpr char CLASS_NAME[] = "Connection";
 
 OZMQPP::Connection::Connection(Connection&& other) :
     m_connection_unique_id(other.m_connection_unique_id),
@@ -31,7 +31,7 @@ OZMQPP::Connection::~Connection()
 void
 OZMQPP::Connection::Bind(const std::string& address_string)
 {
-    int rc = zmq_bind(m_zmq_connection, address_string.c_str());
+    const int rc = zmq_bind(m_zmq_connection, address_string.c_str());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Bind", zmq_strerror(zmq_errno()));
@@ -41,7 +41,7 @@ OZMQPP::Connection::Bind(const std::string& address_string)
 void
 OZMQPP::Connection::Connect(const std::string& address_string)
 {
-    int rc = zmq_connect(m_zmq_connection, address_string.c_str());
+    const int rc = zmq_connect(m_zmq_connection, address_string.c_str());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Connect", zmq_strerror(zmq_errno()));
@@ -51,34 +51,34 @@ OZMQPP::Connection::Connect(const std::string& address_string)
 bool
 OZMQPP::Connection::IsValid() const
 {
-    return(m_zmq_connection != nullptr);
+    return m_zmq_connection != nullptr;
 }
 
 void
 OZMQPP::Connection::SendMessage(const Message& message)
 {
     // Check for number envelops to send
-    unsigned int number_multiparts = message.Size();
-    for(unsigned int i = 0; i < number_multiparts; ++i)
+    const std::size_t number_multi_parts = message.Size();
+    for (std::size_t i = 0; i < number_multi_parts; ++i)
     {
         // Get the raw pointer to message string
         Frame frame = message.GetFrame(i);
-        unsigned int frame_information_size = frame.GetFrameMessageSize();
-        
+        const std::size_t frame_information_size = frame.GetFrameMessageSize();
+
         zmq_msg_t message_struct;
         if (zmq_msg_init_size(&message_struct, frame_information_size) == -1)
         {
             throw InitializationFailed(CLASS_NAME, "SendMessage", zmq_strerror(zmq_errno()));
         }
-        std::vector<int8_t> frame_data = frame.GetFrameData ();
+        std::vector<int8_t> frame_data = frame.GetFrameData();
         // frame.GetFrameInformation(reinterpret_cast<char *>(zmq_msg_data(&message_struct)), frame_information_size);
         // zmq_msg_data(&message_struct));
 
-        memcpy (zmq_msg_data(&message_struct), frame_data.data(), frame_data.size());
+        memcpy(zmq_msg_data(&message_struct), frame_data.data(), frame_data.size());
 
         // Check flags for multipart message
         int flags;
-        if ((i + 1) < number_multiparts)
+        if (i + 1 < number_multi_parts)
         {
             flags = ZMQ_SNDMORE;
         }
@@ -91,7 +91,7 @@ OZMQPP::Connection::SendMessage(const Message& message)
         if (zmq_msg_send(&message_struct, m_zmq_connection, flags) == -1)
         {
             // Save the errno code to throw later
-            int zmq_error_code = zmq_errno();
+            const int zmq_error_code = zmq_errno();
             // If the message is valid close it
             if (zmq_error_code != EFAULT)
             {
@@ -121,18 +121,18 @@ OZMQPP::Connection::ReceiveMessage()
     {
         // init message
         zmq_msg_t part_message;
-        int rc_msg_init = zmq_msg_init(&part_message);
+        const int rc_msg_init = zmq_msg_init(&part_message);
         if (rc_msg_init != 0)
         {
             throw InitializationFailed(CLASS_NAME, "ReceiveMessage", zmq_strerror(zmq_errno()));
         }
 
         // receive message
-        int rc_msg_recv = zmq_msg_recv(&part_message, m_zmq_connection, 0);
+        const int rc_msg_recv = zmq_msg_recv(&part_message, m_zmq_connection, 0);
         if (rc_msg_recv == -1)
         {
             // Save the errno code to throw later
-            int zmq_error_code = zmq_errno();
+            const int zmq_error_code = zmq_errno();
             // If the message is valid close it
             if (zmq_error_code != EFAULT)
             {
@@ -144,8 +144,8 @@ OZMQPP::Connection::ReceiveMessage()
 
         // copy envelop to message
         Frame part_msg_frame;
-        std::vector<int8_t> frame_raw_data(reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)),
-                                           reinterpret_cast<int8_t*>(zmq_msg_data(&part_message)) + zmq_msg_size(&part_message));
+        std::vector<int8_t> frame_raw_data(static_cast<int8_t*>(zmq_msg_data(&part_message)),
+                                           static_cast<int8_t*>(zmq_msg_data(&part_message)) + zmq_msg_size(&part_message));
         part_msg_frame.SetFrameData(frame_raw_data);
 
         message.AppendFrame(part_msg_frame);
@@ -155,8 +155,8 @@ OZMQPP::Connection::ReceiveMessage()
 
         // check if exist more message parts
         zmq_getsockopt(m_zmq_connection, ZMQ_RCVMORE, &more, &more_size);
-
-    } while (more != 0); // check for last message frame
+    }
+    while (more != 0); // check for last message frame
 
     //return wrapper message
     return message;
@@ -177,7 +177,6 @@ OZMQPP::Connection::GetUniqueID() const
 void
 OZMQPP::Connection::ContextCloseCall()
 {
-
 }
 
 OZMQPP::Connection&
@@ -189,9 +188,8 @@ OZMQPP::Connection::operator=(Connection&& other)
     return *this;
 }
 
-OZMQPP::Connection::Connection(unsigned int connection_unique_id, void* raw_zmq_connection) :
-    m_connection_unique_id (connection_unique_id),
+OZMQPP::Connection::Connection(const unsigned int connection_unique_id, void* raw_zmq_connection) :
+    m_connection_unique_id(connection_unique_id),
     m_zmq_connection(raw_zmq_connection)
 {
-
 }
