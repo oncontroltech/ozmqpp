@@ -133,7 +133,7 @@ public:
     //!
     //! @return peer ID in std::vector object format.
     //!
-    //[[nodiscard]] std::vector<char> GetPeerIDVector() const;
+    [[nodiscard]] PeerID GetPeerID() const;
 
     //! @brief Clear Peer ID information from object/class.
     //!

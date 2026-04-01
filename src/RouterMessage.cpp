@@ -113,19 +113,11 @@ OZMQPP::RouterMessage::SetPeerID(const PeerID& new_peer_id)
 //    //delete[] temp_peer_id;
 //}
 
-//std::vector<char>
-//OZMQPP::RouterMessage::GetPeerIDVector() const
-//{
-//    // Declare return container and record data
-//    std::vector<char> peer_id_container;
-//    for (unsigned int i = 0; i < m_peer_id_field_size; ++i)
-//    {
-//        peer_id_container.push_back(m_peer_id_field[i]);
-//    }
-//
-//    // Return data container
-//    return peer_id_container;
-//}
+OZMQPP::PeerID
+OZMQPP::RouterMessage::GetPeerID() const
+{
+    return m_peer_id_field;
+}
 
 //void
 //OZMQPP::RouterMessage::ClearPeerID()
