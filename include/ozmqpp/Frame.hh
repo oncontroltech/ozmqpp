@@ -17,6 +17,7 @@
 #include <string_view>
 #include <cstdint>
 #include <vector>
+#include <string>
 
 namespace OZMQPP
 {
