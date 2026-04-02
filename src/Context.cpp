@@ -36,9 +36,10 @@ OZMQPP::Context::~Context()
 {
     if (m_zmq_context != nullptr)
     {
-        for (auto& [connection_id, connection] : m_connection_map)
+        for (ConnectionIterator iter = m_connection_map.begin(); iter != m_connection_map.end(); ++iter)
         {
-            connection.ContextCloseCall();
+            iter->second->ContextCloseCall();
+            delete iter->second;
         }
         m_connection_map.clear();
 
@@ -58,27 +59,62 @@ OZMQPP::Context::CreateConnection(const SocketType socket_type)
 
     std::scoped_lock<std::mutex> guard(m_connection_mutex);
     void* connection = zmq_socket(m_zmq_context, static_cast<int>(socket_type));
+    if (connection == nullptr)
+    {
+        const std::string error_msg = "Failed to create connection: " + std::string(zmq_strerror(zmq_errno()));
+        throw InvalidContext(CLASS_NAME, "CreateConnection", error_msg);
+    }
 
     const std::uint32_t new_connection_id = m_connections_id_counter;
     const std::pair<ConnectionIterator, bool>& new_connection_pair =
-        m_connection_map.try_emplace(new_connection_id, Connection(new_connection_id, connection));
+        m_connection_map.try_emplace(new_connection_id, new Connection(new_connection_id, connection));
+    if (new_connection_pair.second == false)
+    {
+        throw InvalidContext(CLASS_NAME, "CreateConnection", "Failed to create connection: Error adding to map");
+    }
     ++m_connections_id_counter;
-    
-    return new_connection_pair.first->second;
+
+    return *new_connection_pair.first->second;
 }
 
 OZMQPP::RouterConnection&
 OZMQPP::Context::CreateRouterConnection()
 {
-    return dynamic_cast<OZMQPP::RouterConnection&>(CreateConnection(SocketType::ROUTER));
+    // check for valid context to create connections
+    if (m_zmq_context == nullptr)
+    {
+        throw InvalidContext(CLASS_NAME, "CreateConnection", "Context not valid");
+    }
+
+    std::scoped_lock<std::mutex> guard(m_connection_mutex);
+    void* connection = zmq_socket(m_zmq_context, ZMQ_ROUTER);
+    if (connection == nullptr)
+    {
+        const std::string error_msg = "Failed to create connection: " + std::string(zmq_strerror(zmq_errno()));
+        throw InvalidContext(CLASS_NAME, "CreateConnection", error_msg);
+    }
+
+    const std::uint32_t new_connection_id = m_connections_id_counter;
+    RouterConnection* new_connection = new RouterConnection(new_connection_id, connection);
+    const std::pair<ConnectionIterator, bool>& new_connection_pair =
+        m_connection_map.try_emplace(new_connection_id, new_connection);
+    if (new_connection_pair.second == false)
+    {
+        throw InvalidContext(CLASS_NAME, "CreateConnection", "Failed to create connection: Error adding to map");
+    }
+    ++m_connections_id_counter;
+
+    return *new_connection;
 }
 
 void
 OZMQPP::Context::EraseConnection(const Connection& connection_ref)
 {
-    if (m_connection_map.contains(connection_ref.GetUniqueID()) == true)
+    const ConnectionIterator iter = m_connection_map.find(connection_ref.GetUniqueID());
+    if (iter != m_connection_map.end())
     {
-        m_connection_map.erase(connection_ref.GetUniqueID());
+        delete iter->second;
+        m_connection_map.erase(iter);
     }
 }
 

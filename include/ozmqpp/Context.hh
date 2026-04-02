@@ -104,8 +104,8 @@ private:
     //! to perform communication actions. The ownership belong to the context,
     //! which will be responsible to erase them from memory.
     //!
-    using ConnectionMap = std::map<std::uint32_t, Connection>;
-    using ConnectionPair = std::pair<std::uint32_t, Connection>;
+    using ConnectionMap = std::map<std::uint32_t, Connection*>;
+    using ConnectionPair = std::pair<std::uint32_t, Connection*>;
     using ConnectionIterator = ConnectionMap::iterator;
     ConnectionMap m_connection_map;
 
