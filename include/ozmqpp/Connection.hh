@@ -55,6 +55,8 @@ public:
     //!
     virtual void Bind(const std::string& address_string);
 
+    virtual void Unbind();
+
     //! @brief Connect to other existent connection.
     //!
     //! This connection will act as client.
@@ -62,6 +64,8 @@ public:
     //! @param address_string String containing a valid zeromq address.
     //!
     virtual void Connect(const std::string& address_string);
+
+    virtual void Disconnect();
 
     //! @brief Check if connection is still valid.
     //!
@@ -131,7 +135,7 @@ private:
 
     //! @brief connection id
     //!
-    //! The conenction id should be unique inside the context, due to be used
+    //! The connection id should be unique inside the context, due to be used
     //! as indexation number for operations within context.
     //!
     unsigned int m_connection_unique_id;
@@ -140,7 +144,9 @@ private:
     //!
     //! This context pointer will be used by native zeromq resources.
     //!
-    void* m_zmq_connection;    
+    void* m_zmq_connection;
+
+    std::string m_endpoint;
 
 }; // class Connection
 

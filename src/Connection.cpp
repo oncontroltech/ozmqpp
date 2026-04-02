@@ -39,12 +39,34 @@ OZMQPP::Connection::Bind(const std::string& address_string)
 }
 
 void
+OZMQPP::Connection::Unbind()
+{
+    const int rc = zmq_unbind(m_zmq_connection, m_endpoint.c_str());
+    if (rc == -1)
+    {
+        throw InitializationFailed(CLASS_NAME, "Unbind", zmq_strerror(zmq_errno()));
+    }
+}
+
+void
 OZMQPP::Connection::Connect(const std::string& address_string)
 {
     const int rc = zmq_connect(m_zmq_connection, address_string.c_str());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Connect", zmq_strerror(zmq_errno()));
+    }
+
+    m_endpoint = address_string;
+}
+
+void
+OZMQPP::Connection::Disconnect()
+{
+    const int rc = zmq_disconnect(m_zmq_connection, m_endpoint.c_str());
+    if (rc == -1)
+    {
+        throw InitializationFailed(CLASS_NAME, "Disconnect", zmq_strerror(zmq_errno()));
     }
 }
 
