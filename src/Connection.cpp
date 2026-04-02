@@ -36,6 +36,8 @@ OZMQPP::Connection::Bind(const std::string& address_string)
     {
         throw InitializationFailed(CLASS_NAME, "Bind", zmq_strerror(zmq_errno()));
     }
+
+    m_endpoint = address_string;
 }
 
 void
@@ -46,8 +48,6 @@ OZMQPP::Connection::Unbind()
     {
         throw InitializationFailed(CLASS_NAME, "Unbind", zmq_strerror(zmq_errno()));
     }
-
-    m_endpoint = address_string;
 }
 
 void
