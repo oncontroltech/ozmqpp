@@ -36,10 +36,9 @@ OZMQPP::Context::~Context()
 {
     if (m_zmq_context != nullptr)
     {
-        for (auto map_it = m_connection_map.begin(); map_it != m_connection_map.end(); ++map_it)
+        for (auto& [connection_id, connection] : m_connection_map)
         {
-            map_it->second->ContextCloseCall();
-            delete map_it->second;
+            connection.ContextCloseCall();
         }
         m_connection_map.clear();
 
@@ -57,48 +56,29 @@ OZMQPP::Context::CreateConnection(const SocketType socket_type)
         throw InvalidContext(CLASS_NAME, "CreateConnection", "Context not valid");
     }
 
-    m_connection_mutex.lock();
-    void* connection = zmq_socket(m_zmq_context, socket_type);
-    m_connection_mutex.unlock();
+    std::scoped_lock<std::mutex> guard(m_connection_mutex);
+    void* connection = zmq_socket(m_zmq_context, static_cast<int>(socket_type));
 
-    unsigned int new_connection_id = m_connections_id_counter;
-    Connection* connection_ptr = new Connection(new_connection_id, connection);
-    m_connection_map.insert(std::pair(new_connection_id, connection_ptr));
+    const std::uint32_t new_connection_id = m_connections_id_counter;
+    const std::pair<ConnectionIterator, bool>& new_connection_pair =
+        m_connection_map.try_emplace(new_connection_id, Connection(new_connection_id, connection));
     ++m_connections_id_counter;
     
-    return *connection_ptr;
+    return new_connection_pair.first->second;
 }
 
 OZMQPP::RouterConnection&
 OZMQPP::Context::CreateRouterConnection()
 {
-    if (m_zmq_context == nullptr)
-    {
-        throw InvalidContext(CLASS_NAME, "CreateRouterConnection", zmq_strerror(zmq_errno()));
-    }
-    m_connection_mutex.lock();
-    void* connection = zmq_socket(m_zmq_context, ZMQ_ROUTER);
-    m_connection_mutex.unlock();
-
-    unsigned int new_connection_id = m_connections_id_counter;
-    RouterConnection* connection_ptr = new RouterConnection(new_connection_id, connection);
-    m_connection_map.insert(std::pair(new_connection_id, connection_ptr));
-    ++m_connections_id_counter;
-    
-    return *connection_ptr;
+    return dynamic_cast<OZMQPP::RouterConnection&>(CreateConnection(SocketType::ROUTER));
 }
 
 void
-OZMQPP::Context::EraseConnection(Connection& connection_ref)
+OZMQPP::Context::EraseConnection(const Connection& connection_ref)
 {
-    for (auto map_it = m_connection_map.begin(); map_it != m_connection_map.end(); ++map_it)
+    if (m_connection_map.contains(connection_ref.GetUniqueID()) == true)
     {
-        if (map_it->second->GetRaw() == connection_ref.GetRaw())
-        {
-            delete map_it->second;
-            m_connection_map.erase(map_it);
-            break;
-        }
+        m_connection_map.erase(connection_ref.GetUniqueID());
     }
 }
 

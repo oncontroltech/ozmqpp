@@ -122,6 +122,7 @@ protected:
 
     //! @brief Default class constructor.
     //!
+    //! @param connection_unique_id Connection ID in the connection map.
     //! @param raw_zmq_connection Connection to zeromq connection resource.
     //!
     Connection(const unsigned int connection_unique_id, void* raw_zmq_connection);
