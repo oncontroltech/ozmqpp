@@ -66,7 +66,7 @@ OZMQPP::Context::CreateConnection(const SocketType socket_type)
     }
 
     const std::uint32_t new_connection_id = m_connections_id_counter;
-    const std::pair<ConnectionIterator, bool>& new_connection_pair =
+    const std::pair<ConnectionIterator, bool> new_connection_pair =
         m_connection_map.try_emplace(new_connection_id, new Connection(new_connection_id, connection));
     if (new_connection_pair.second == false)
     {
@@ -96,7 +96,7 @@ OZMQPP::Context::CreateRouterConnection()
 
     const std::uint32_t new_connection_id = m_connections_id_counter;
     RouterConnection* new_connection = new RouterConnection(new_connection_id, connection);
-    const std::pair<ConnectionIterator, bool>& new_connection_pair =
+    const std::pair<ConnectionIterator, bool> new_connection_pair =
         m_connection_map.try_emplace(new_connection_id, new_connection);
     if (new_connection_pair.second == false)
     {
