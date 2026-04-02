@@ -10,6 +10,7 @@
 static constexpr char CLASS_NAME[] = "Context";
 
 OZMQPP::Context::Context() :
+    m_connection_map(),
     m_connection_mutex(),
     m_connections_id_counter(0)
 {
@@ -25,6 +26,7 @@ OZMQPP::Context::Context() :
 
 OZMQPP::Context::Context(Context& other) :
     m_zmq_context(other.m_zmq_context),
+    m_connection_map(other.m_connection_map),
     m_connection_mutex(),
     m_connections_id_counter(other.m_connections_id_counter)
 {
@@ -126,6 +128,7 @@ OZMQPP::Context::operator=(Context& other)
         return *this;
     }
     m_zmq_context = other.m_zmq_context;
+    m_connection_map = other.m_connection_map;
     other.m_zmq_context = nullptr;
     return *this;
 }
