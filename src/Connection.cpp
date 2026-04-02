@@ -46,6 +46,8 @@ OZMQPP::Connection::Unbind()
     {
         throw InitializationFailed(CLASS_NAME, "Unbind", zmq_strerror(zmq_errno()));
     }
+
+    m_endpoint = address_string;
 }
 
 void
