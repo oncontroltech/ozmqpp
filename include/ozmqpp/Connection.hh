@@ -31,6 +31,13 @@ class Context;
 class ZMQ_API Connection
 {
 public:
+    enum class ConnectionStatus
+    {
+        NOT_CONNECTED,
+        CONNECTED,
+        BOUND
+    };
+
     Connection() = delete;
 
     //! @brief Copy constructor.
@@ -46,6 +53,8 @@ public:
     //! Check if contains valid raw zeromq resources to de-allocate.
     //!
     virtual ~Connection();
+
+    ConnectionStatus GetConnectionStatus() const;
 
     //! @brief Create connection for others connect to.
     //!
@@ -132,7 +141,6 @@ protected:
     Connection(const unsigned int connection_unique_id, void* raw_zmq_connection);
 
 private:
-
     //! @brief connection id
     //!
     //! The connection id should be unique inside the context, due to be used
@@ -147,6 +155,8 @@ private:
     void* m_zmq_connection;
 
     std::string m_endpoint;
+
+    ConnectionStatus m_connection_status;
 
 }; // class Connection
 

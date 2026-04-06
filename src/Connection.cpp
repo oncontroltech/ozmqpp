@@ -14,13 +14,23 @@ static constexpr char CLASS_NAME[] = "Connection";
 
 OZMQPP::Connection::Connection(Connection&& other) :
     m_connection_unique_id(other.m_connection_unique_id),
-    m_zmq_connection(other.m_zmq_connection)
+    m_zmq_connection(other.m_zmq_connection),
+    m_connection_status(other.m_connection_status)
 {
     other.m_zmq_connection = nullptr;
 }
 
 OZMQPP::Connection::~Connection()
 {
+    if (m_connection_status == ConnectionStatus::CONNECTED)
+    {
+        Disconnect();
+    }
+    else if (m_connection_status == ConnectionStatus::BOUND)
+    {
+        Unbind();
+    }
+
     if (m_zmq_connection != nullptr)
     {
         zmq_close(m_zmq_connection);
@@ -28,9 +38,24 @@ OZMQPP::Connection::~Connection()
     }
 }
 
+OZMQPP::Connection::ConnectionStatus
+OZMQPP::Connection::GetConnectionStatus() const
+{
+    return m_connection_status;
+}
+
 void
 OZMQPP::Connection::Bind(const std::string& address_string)
 {
+    if (m_connection_status != ConnectionStatus::NOT_CONNECTED)
+    {
+        throw InitializationFailed(CLASS_NAME, "Bind", "Already Connected/Bound");
+    }
+    if (address_string.empty() == true)
+    {
+        throw InitializationFailed(CLASS_NAME, "Bind", "Invalid address");
+    }
+
     const int rc = zmq_bind(m_zmq_connection, address_string.c_str());
     if (rc == -1)
     {
@@ -43,16 +68,32 @@ OZMQPP::Connection::Bind(const std::string& address_string)
 void
 OZMQPP::Connection::Unbind()
 {
+    if (m_connection_status != ConnectionStatus::BOUND)
+    {
+        throw InitializationFailed(CLASS_NAME, "Unbind", "Not bound or is connected");
+    }
+
     const int rc = zmq_unbind(m_zmq_connection, m_endpoint.c_str());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Unbind", zmq_strerror(zmq_errno()));
     }
+
+    m_endpoint = "";
 }
 
 void
 OZMQPP::Connection::Connect(const std::string& address_string)
 {
+    if (m_connection_status != ConnectionStatus::NOT_CONNECTED)
+    {
+        throw InitializationFailed(CLASS_NAME, "Connect", "Already Connected/Bound");
+    }
+    if (address_string.empty() == true)
+    {
+        throw InitializationFailed(CLASS_NAME, "Connect", "Invalid address");
+    }
+
     const int rc = zmq_connect(m_zmq_connection, address_string.c_str());
     if (rc == -1)
     {
@@ -65,11 +106,18 @@ OZMQPP::Connection::Connect(const std::string& address_string)
 void
 OZMQPP::Connection::Disconnect()
 {
+    if (m_connection_status != ConnectionStatus::CONNECTED)
+    {
+        throw InitializationFailed(CLASS_NAME, "Disconnect", "Not connected or is bound");
+    }
+
     const int rc = zmq_disconnect(m_zmq_connection, m_endpoint.c_str());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Disconnect", zmq_strerror(zmq_errno()));
     }
+
+    m_endpoint = "";
 }
 
 bool
@@ -86,7 +134,7 @@ OZMQPP::Connection::SendMessage(const Message& message)
     for (std::size_t i = 0; i < number_multi_parts; ++i)
     {
         // Get the raw pointer to message string
-        Frame frame = message.GetFrame(i);
+        const Frame frame = message.GetFrame(i);
         const std::size_t frame_information_size = frame.GetFrameMessageSize();
 
         zmq_msg_t message_struct;
@@ -94,7 +142,7 @@ OZMQPP::Connection::SendMessage(const Message& message)
         {
             throw InitializationFailed(CLASS_NAME, "SendMessage", zmq_strerror(zmq_errno()));
         }
-        std::vector<int8_t> frame_data = frame.GetFrameData();
+        const std::vector<int8_t> frame_data = frame.GetFrameData();
         // frame.GetFrameInformation(reinterpret_cast<char *>(zmq_msg_data(&message_struct)), frame_information_size);
         // zmq_msg_data(&message_struct));
 
@@ -167,9 +215,9 @@ OZMQPP::Connection::ReceiveMessage()
         }
 
         // copy envelop to message
+        const int8_t* msg_data = static_cast<int8_t*>(zmq_msg_data(&part_message));
+        const std::vector<int8_t> frame_raw_data(msg_data, msg_data + zmq_msg_size(&part_message));
         Frame part_msg_frame;
-        std::vector<int8_t> frame_raw_data(static_cast<int8_t*>(zmq_msg_data(&part_message)),
-                                           static_cast<int8_t*>(zmq_msg_data(&part_message)) + zmq_msg_size(&part_message));
         part_msg_frame.SetFrameData(frame_raw_data);
 
         message.AppendFrame(part_msg_frame);
@@ -208,12 +256,15 @@ OZMQPP::Connection::operator=(Connection&& other)
 {
     m_connection_unique_id = other.m_connection_unique_id;
     m_zmq_connection = other.m_zmq_connection;
+    m_connection_status = other.m_connection_status;
     other.m_zmq_connection = nullptr;
+    other.m_connection_status = ConnectionStatus::NOT_CONNECTED;
     return *this;
 }
 
 OZMQPP::Connection::Connection(const unsigned int connection_unique_id, void* raw_zmq_connection) :
     m_connection_unique_id(connection_unique_id),
-    m_zmq_connection(raw_zmq_connection)
+    m_zmq_connection(raw_zmq_connection),
+    m_connection_status(ConnectionStatus::NOT_CONNECTED)
 {
 }
