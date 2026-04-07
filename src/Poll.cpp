@@ -4,7 +4,7 @@
 #include "ozmqpp/exceptions/PollingError.hh"
 
 // File const values
-static const char CLASS_NAME[] = "Poll";
+static constexpr char CLASS_NAME[] = "Poll";
 
 OZMQPP::Poll::Poll() :
     m_ids_poll()
@@ -19,9 +19,9 @@ OZMQPP::Poll::Poll(const Poll& other) :
 }
 
 void
-OZMQPP::Poll::AddConnection(int id, Connection& connection)
+OZMQPP::Poll::AddConnection(const int id, Connection& connection)
 {
-    PoolBlock block{
+    const PoolBlock block{
         .id = id,
         .raw_zmqconnection = connection.GetRaw()
     };
@@ -31,10 +31,16 @@ OZMQPP::Poll::AddConnection(int id, Connection& connection)
 }
 
 void
-OZMQPP::Poll::RemoveConnection(int id)
+OZMQPP::Poll::RemoveConnection(const int id)
 {
     // Search vector for identifier
     std::vector<Poll::PoolBlock>::iterator iter = m_ids_poll.begin();
+    // If not found
+    if (iter == m_ids_poll.end())
+    {
+        throw PollingError(CLASS_NAME, "RemoveConnection", "Invalid poll id");
+    }
+
     for (; iter != m_ids_poll.end(); ++iter)
     {
         if (iter->id == id)
@@ -45,11 +51,6 @@ OZMQPP::Poll::RemoveConnection(int id)
         }
     }
 
-    // If not found
-    if (iter == m_ids_poll.end())
-    {
-        throw PollingError(CLASS_NAME, "RemoveConnection", "Invalid poll id");
-    }
     SynchronizeRaw();
 }
 
@@ -57,7 +58,7 @@ int
 OZMQPP::Poll::Wait()
 {
     // Wait for message from zmq framework
-    int zmq_error_code = zmq_poll(m_raw_zmqitems.data(), m_ids_poll.size(), -1);
+    const int zmq_error_code = zmq_poll(m_raw_zmqitems.data(), static_cast<int>(m_ids_poll.size()), -1);
 
     // If there was an error
     if (zmq_error_code == -1)
@@ -84,7 +85,7 @@ OZMQPP::Poll::operator=(const Poll& other)
 {
     if (m_ids_poll != other.m_ids_poll)
     {
-        std::copy(other.m_ids_poll.begin(), other.m_ids_poll.end(), m_ids_poll.begin());
+        std::ranges::copy(other.m_ids_poll, m_ids_poll.begin());
     }
     SynchronizeRaw();
     return *this;
@@ -93,7 +94,7 @@ OZMQPP::Poll::operator=(const Poll& other)
 void
 OZMQPP::Poll::SynchronizeRaw()
 {
-    std::size_t pool_size = m_ids_poll.size();
+    const std::size_t pool_size = m_ids_poll.size();
 
     // Clear previous raw container
     if (m_raw_zmqitems.size() != pool_size)

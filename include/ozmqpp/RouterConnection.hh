@@ -42,7 +42,7 @@ public:
 
     //! @brief class destructor.
     //!
-    ~RouterConnection();
+    ~RouterConnection() override;
 
     //! @brief Retrieve message from connection with router format.
     //!
@@ -59,7 +59,7 @@ protected:
     //!
     //! @param raw_connection Connection to zeromq connection resource.
     //!
-    RouterConnection(unsigned int new_connection_id, void* zmq_connection);
+    RouterConnection(const unsigned int new_connection_id, void* zmq_connection);
 
     //! @brief Friend class used to create default connection objects.
     //!

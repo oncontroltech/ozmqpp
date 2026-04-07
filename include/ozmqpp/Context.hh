@@ -27,7 +27,7 @@ namespace OZMQPP
 {
     //! @brief Types of socket provided by ZMQ architecture
     //!
-    enum SocketType : uint8_t
+    enum class  SocketType : uint8_t
     {
         PUBLISHER = ZMQ_PUB,
         SUBSCRIBER = ZMQ_SUB,
@@ -67,11 +67,10 @@ public:
     //! @param socket_type Type of socket to create.
     //! @return Valid Connection object to be used on communication.
     //!
-    [[nodiscard]] Connection& CreateConnection(SocketType socket_type);
+    [[nodiscard]] Connection& CreateConnection(const SocketType socket_type);
 
     //! @brief Create zeromq router connection wrapper.
     //!
-    //! @param socket_type Type of socket to create.
     //! @return Valid RouterConnection object to be used on communication.
     //!
     [[nodiscard]] RouterConnection& CreateRouterConnection();
@@ -80,7 +79,7 @@ public:
     //!
     //! @param connection_object Object to handle ownership.
     //!
-    void EraseConnection(Connection& connection_ref);
+    void EraseConnection(const Connection& connection_ref);
 
     //! @brief Copy operator overload.
     //!
@@ -105,7 +104,10 @@ private:
     //! to perform communication actions. The ownership belong to the context,
     //! which will be responsible to erase them from memory.
     //!
-    std::map<unsigned int, Connection*> m_connection_map;
+    using ConnectionMap = std::map<std::uint32_t, Connection*>;
+    using ConnectionPair = std::pair<std::uint32_t, Connection*>;
+    using ConnectionIterator = ConnectionMap::iterator;
+    ConnectionMap m_connection_map;
 
     //! @brief This mutex protects the creation of the socket.
     //!

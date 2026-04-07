@@ -1,30 +1,21 @@
 #include "ozmqpp/Frame.hh"
 
-// STD headers
-#include <cstring>
-#include <algorithm>
-
 // EXCEPTION headers
-#include "ozmqpp/exceptions/BadAlloc.hh"
 #include "ozmqpp/exceptions/InitializationFailed.hh"
 
 // File const values
-static const char CLASS_NAME[] = "Frame";
+static constexpr char CLASS_NAME[] = "Frame";
 
-OZMQPP::Frame::Frame()
-{
-
-}
+OZMQPP::Frame::Frame() = default;
 
 OZMQPP::Frame::Frame(const std::vector<int8_t>& frame_data) :
     m_frame_data (frame_data)
 {
 }
 
-OZMQPP::Frame::Frame(const std::string& message_text)
+OZMQPP::Frame::Frame(const std::string_view message_text)
 {
-    std::vector<int8_t> message_vector (message_text.begin(), message_text.end());
-    
+    const std::vector<int8_t> message_vector(message_text.begin(), message_text.end());
     m_frame_data = message_vector;
 }
 
@@ -33,16 +24,12 @@ OZMQPP::Frame::Frame(const Frame& other) :
 {
 }
 
-OZMQPP::Frame::~Frame()
-{
-    // ClearFrameMemoryContainer();
-}
+OZMQPP::Frame::~Frame() = default;
 
 bool
 OZMQPP::Frame::IsEmpty() const
 {
-    bool is_frame_empy = (m_frame_data.size() == 0);
-    return is_frame_empy;
+    return m_frame_data.empty();
 }
 
 size_t
@@ -64,16 +51,16 @@ OZMQPP::Frame::GetFrameData() const
 }
 
 void
-OZMQPP::Frame::SetMessageString(const std::string& message)
+OZMQPP::Frame::SetMessageString(const std::string_view message)
 {
-    std::vector<int8_t> message_vector (message.begin(), message.end());
+    const std::vector<int8_t> message_vector(message.begin(), message.end());
     m_frame_data = message_vector;
 }
 
 std::string
 OZMQPP::Frame::GetMessageString() const
 {
-    std::string data_message (reinterpret_cast<const char*>(m_frame_data.data()), m_frame_data.size());
+    const std::string data_message(reinterpret_cast<const char*>(m_frame_data.data()), m_frame_data.size());
 
     // Return string structure
     return data_message;

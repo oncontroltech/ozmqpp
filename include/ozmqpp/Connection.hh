@@ -31,6 +31,13 @@ class Context;
 class ZMQ_API Connection
 {
 public:
+    enum class ConnectionStatus
+    {
+        NOT_CONNECTED,
+        CONNECTED,
+        BOUND
+    };
+
     Connection() = delete;
 
     //! @brief Copy constructor.
@@ -47,6 +54,8 @@ public:
     //!
     virtual ~Connection();
 
+    ConnectionStatus GetConnectionStatus() const;
+
     //! @brief Create connection for others connect to.
     //!
     //! This connection will act as server.
@@ -55,6 +64,8 @@ public:
     //!
     virtual void Bind(const std::string& address_string);
 
+    virtual void Unbind();
+
     //! @brief Connect to other existent connection.
     //!
     //! This connection will act as client.
@@ -62,6 +73,8 @@ public:
     //! @param address_string String containing a valid zeromq address.
     //!
     virtual void Connect(const std::string& address_string);
+
+    virtual void Disconnect();
 
     //! @brief Check if connection is still valid.
     //!
@@ -122,15 +135,15 @@ protected:
 
     //! @brief Default class constructor.
     //!
-    //! @param raw_connection Connection to zeromq connection resource.
+    //! @param connection_unique_id Connection ID in the connection map.
+    //! @param raw_zmq_connection Connection to zeromq connection resource.
     //!
-    Connection (unsigned int connection_unique_id, void* raw_zmq_connection);
+    Connection(const unsigned int connection_unique_id, void* raw_zmq_connection);
 
 private:
-
     //! @brief connection id
     //!
-    //! The conenction id should be unique inside the context, due to be used
+    //! The connection id should be unique inside the context, due to be used
     //! as indexation number for operations within context.
     //!
     unsigned int m_connection_unique_id;
@@ -139,7 +152,11 @@ private:
     //!
     //! This context pointer will be used by native zeromq resources.
     //!
-    void* m_zmq_connection;    
+    void* m_zmq_connection;
+
+    std::string m_endpoint;
+
+    ConnectionStatus m_connection_status;
 
 }; // class Connection
 

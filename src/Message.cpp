@@ -24,14 +24,14 @@ OZMQPP::Message::AppendFrame(const Frame& frame)
     m_message_frames.push_back(frame);
 }
 
-unsigned int
+std::size_t
 OZMQPP::Message::Size() const
 {
     return m_message_frames.size();
 }
 
 OZMQPP::Frame
-OZMQPP::Message::GetFrame(unsigned int frame_number) const
+OZMQPP::Message::GetFrame(const std::size_t frame_number) const
 {
     return m_message_frames.at(frame_number);
 }

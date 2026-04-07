@@ -14,14 +14,16 @@
 #endif
 
 // STD headers
-#include <string>
+#include <string_view>
+#include <cstdint>
 #include <vector>
+#include <string>
 
 namespace OZMQPP
 {
 //! @brief zeromq envelope wrapper.
 //!
-//! The envelop is characterized by a continuous array of characters. This
+//! The envelope is characterized by a continuous array of characters. This
 //! class contain the resources to needed to represent the zeromq message
 //! envelope.
 //!
@@ -44,14 +46,14 @@ public:
     //!
     //! @param frame_data vector of bytes representing frame information.
     //!
-    Frame(const std::vector<int8_t>& frame_data);
+    explicit Frame(const std::vector<int8_t>& frame_data);
 
 
     //! @brief Constructor with initialization by a string (c++ style).
     //!
     //! @param message_text Envelop character string.
     //!
-    explicit Frame(const std::string& message_text);
+    explicit Frame(std::string_view message_text);
 
     //! @brief Copy constructor.
     //!
@@ -94,13 +96,13 @@ public:
     //!
     //! @return values
     //!
-    std::vector<int8_t> GetFrameData () const;
+    [[nodiscard]] std::vector<std::int8_t> GetFrameData() const;
 
     //! @brief Set the envelope characters by std::string.
     //!
     //! @param message Envelope characters stream as std::string.
     //!
-    void SetMessageString(const std::string& message);
+    void SetMessageString(const std::string_view message);
 
     //! @brief Retrieve the envelope memory as std::string.
     //!
@@ -115,14 +117,11 @@ public:
     //!
     Frame& operator=(const Frame& other);
 
-protected:
-
-
 private:
 
     //! @brief Buffer containing the information contained in the frame.
     //!
-    std::vector<int8_t> m_frame_data;
+    std::vector<std::int8_t> m_frame_data;
 
 }; // class Frame
 

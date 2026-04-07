@@ -51,13 +51,13 @@ public:
     //! @param id Poll id.
     //! @param connection Connection that triggers the poll.
     //!
-    void AddConnection(int id, Connection& connection);
+    void AddConnection(const int id, Connection& connection);
 
     //! @brief Remove connection using identification.
     //!
     //! @param id Poll id.
     //!
-    void RemoveConnection(int id);
+    void RemoveConnection(const int id);
 
     //! @brief Wait for incoming message.
     //!
@@ -117,6 +117,6 @@ private:
 
 }; // class Pool
 
-} // namescpace OZMQPP
+} // namespace OZMQPP
 
 #endif // ZMQ_POLL_HH
