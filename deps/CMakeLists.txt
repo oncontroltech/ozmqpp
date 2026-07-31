@@ -1,6 +1,8 @@
 include(FetchContent)
 
 set(ZMQ_BUILD_TESTS OFF CACHE INTERNAL "Turn off libzmq tests")
+set(BUILD_SHARED OFF CACHE INTERNAL "Link libzmq dynamically")
+set(BUILD_STATIC ON CACHE INTERNAL "Link libzmq-static library")
 
 FetchContent_Declare(
 	libzmq
@@ -8,16 +10,16 @@ FetchContent_Declare(
 	DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
-add_dependencies(${ZMQ_TARGET} libzmq)
+add_dependencies(${ZMQ_TARGET} libzmq-static)
 
 FetchContent_MakeAvailable(libzmq)
 
 target_link_libraries(${ZMQ_TARGET}
-    PUBLIC
-        libzmq
+    PRIVATE
+        libzmq-static
 )
 
-get_target_property(ZMQ_INCLUDE_DIRS libzmq INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(ZMQ_INCLUDE_DIRS libzmq-static INTERFACE_INCLUDE_DIRECTORIES)
 if(ZMQ_INCLUDE_DIRS)
 	target_include_directories(${ZMQ_TARGET}
 		PUBLIC
