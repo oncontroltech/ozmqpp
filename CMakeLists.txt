@@ -88,7 +88,7 @@ if (MSVC)
         target_link_options(${ZMQ_TARGET}
             PRIVATE
                 /LTCG # Link time code generation
-                /OPT:REF # Remove unreference functions/data
+                /OPT:REF # Remove unreferenced functions/data
                 /OPT:ICF # Fold identical functions
                 /INCREMENTAL:NO # No incremental linking in release
                 /NXCOMPAT # Marks binary as Data Execution Prevention compatible
