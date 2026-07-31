@@ -2,3 +2,5 @@ build/
 tests/vgcore.*
 .vscode/
 Testing/
+scripts/coverage.info
+scripts/coverage_html/

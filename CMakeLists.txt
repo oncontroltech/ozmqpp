@@ -160,6 +160,19 @@ else ()
                 -grecord-gcc-switches
         )
 
+        option(OZMQPP_ENABLE_COVERAGE "Enable coverage reporting" OFF)
+        if (OZMQPP_ENABLE_COVERAGE)
+            target_compile_options(${ZMQ_TARGET}
+                PRIVATE
+                    --coverage
+            )
+
+            target_link_options(${ZMQ_TARGET}
+                PRIVATE
+                    --coverage
+            )
+        endif ()
+
     elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
         target_compile_options(${ZMQ_TARGET}
             PRIVATE
