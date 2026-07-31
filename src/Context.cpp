@@ -121,7 +121,7 @@ OZMQPP::Context::EraseConnection(const Connection& connection_ref)
 }
 
 OZMQPP::Context&
-OZMQPP::Context::operator=(Context& other)
+OZMQPP::Context::operator=(Context&& other) noexcept
 {
     if (this == &other)
     {

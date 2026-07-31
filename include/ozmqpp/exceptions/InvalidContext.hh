@@ -22,16 +22,11 @@ namespace OZMQPP
 class ZMQ_API InvalidContext : public Exception
 {
 public:
-    InvalidContext(const std::string& class_name,
-                   const std::string& function_name,
-                   const std::string& error_msg) noexcept;
-    
-    virtual ~InvalidContext();
+    InvalidContext(const std::string_view class_name,
+                   const std::string_view function_name,
+                   const std::string_view error_msg) noexcept;
 
-protected:
-
-private:
-
+    ~InvalidContext() override;
 }; // class InvalidContext
 
 } // namespace OZMQPP

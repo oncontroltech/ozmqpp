@@ -76,7 +76,7 @@ OZMQPP::Frame::operator=(const Frame& other)
 
      // Copy data to class
     m_frame_data = other.m_frame_data;
-    
+
     // Return self
     return *this;
 }

@@ -45,7 +45,6 @@ using PeerID = std::array<char, ZMQ_PEER_ID_SIZE>;
 class ZMQ_API RouterMessage : public Message
 {
 public:
-
     //! @brief Default class constructor.
     //!
     RouterMessage();
@@ -100,44 +99,11 @@ public:
     //!
     void SetPeerID(const PeerID& new_peer_id);
 
-    //! @brief Return peer id array size.
-    //!
-    //! @return Size of peer ID array.
-    //!
-    //[[nodiscard]] std::size_t GetPeerIDSize() const;
-
-    //! @brief Obtain the peer id field in raw format.
-    //!
-    //! Before coping the peer id array, method checks if parameter peer_id_field
-    //! can include all data by checking max_size. It will copy the fill peer id
-    //! array, if max_size is bigger or equal than m_peer_id_field_size.
-    //!
-    //! If max_size smaller than m_peer_id_field_size it will only copy the amount
-    //! of data the array can handle (memory protection).
-    //!
-    //! @param peer_id_field Array to record peer id data.
-    //! @param max_size Maximum size of the data to be copied.
-    //! @return number of elements from peer id copied.
-    //!
-    //std::size_t GetRawPeerID(char* peer_id_field, std::size_t max_size) const;
-
-    //! @brief Introduce the peer ID by std::vector object (c++ style).
-    //!
-    //! Internal data allocation will take in consideration the size of vector.
-    //!
-    //! @param peer_id_vector Vector containing peer id data.
-    //!
-    //void SetPeerIDVector(const std::vector<char>& peer_id_vector);
-
     //! @brief Retrieve peer if information by std::vector object (c++ style).
     //!
     //! @return peer ID in std::vector object format.
     //!
     [[nodiscard]] PeerID GetPeerID() const;
-
-    //! @brief Clear Peer ID information from object/class.
-    //!
-    //void ClearPeerID();
 
     //! @brief Create a resource-initialize message for answer this one.
     //!
@@ -165,7 +131,7 @@ private:
     //! of bytes.
     //!
     PeerID m_peer_id_field;
-}; // class 
+}; // class RouterMessage
 
 } // namespace OZMQPP
 

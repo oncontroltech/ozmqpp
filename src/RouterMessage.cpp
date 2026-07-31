@@ -64,72 +64,11 @@ OZMQPP::RouterMessage::SetPeerID(const PeerID& new_peer_id)
     m_peer_id_field = new_peer_id;
 }
 
-//std::size_t
-//OZMQPP::RouterMessage::GetPeerIDSize() const
-//{
-//    return m_peer_id_field_size;
-//}
-
-//std::size_t
-//OZMQPP::RouterMessage::GetRawPeerID(char* peer_id_field,
-//                                    std::size_t max_size) const
-//{
-//    // Check max size to copy
-//    std::size_t copy_size = std::min(max_size, m_peer_id_field_size);
-//
-//    // Check if possible to copy
-//    if (m_peer_id_field == nullptr)
-//    {
-//        throw BadAlloc(CLASS_NAME, "GetRawPeerID", "Failed to allocate memory");
-//    }
-//
-//    std::memcpy(peer_id_field, m_peer_id_field, copy_size);
-//    return copy_size;
-//}
-
-//void
-//OZMQPP::RouterMessage::SetPeerIDVector(const std::vector<char>& peer_id_vector)
-//{
-//    // Check if data must be cleared
-//    if (IsEmpty() == false)
-//    {
-//        ClearPeerID();
-//    }
-//
-//    // Get the size of vector id and allocate temporary space
-//    //std::size_t temp_peer_id_size = peer_id_vector.size();
-//    //char* temp_peer_id = new char[temp_peer_id_size];
-//
-//    // Copy data locally
-//    //for (std::size_t position = 0; position < peer_id_vector.size(); ++position)
-//    //{
-//    //    temp_peer_id[position] = peer_id_vector[position];
-//    //}
-//
-//    // Attribute data
-//    SetPeerID(peer_id_vector.data(), peer_id_vector.size());
-//
-//    // Clear temp allocated space
-//    //delete[] temp_peer_id;
-//}
-
 OZMQPP::PeerID
 OZMQPP::RouterMessage::GetPeerID() const
 {
     return m_peer_id_field;
 }
-
-//void
-//OZMQPP::RouterMessage::ClearPeerID()
-//{
-//    if (m_peer_id_field != nullptr)
-//    {
-//        free(m_peer_id_field);
-//        m_peer_id_field = nullptr;
-//    }
-//
-//    m_peer_id_field_size = 0;
-//}
 
 OZMQPP::RouterMessage
 OZMQPP::RouterMessage::DerivateAnswerMessage() const

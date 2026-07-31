@@ -22,16 +22,11 @@ namespace OZMQPP
 class ZMQ_API InitializationFailed : public Exception
 {
 public:
-    InitializationFailed (const std::string& class_name,
-                          const std::string& function_name,
-                          const std::string& error_msg) noexcept;
-    
-    virtual ~InitializationFailed();
+    InitializationFailed(const std::string_view class_name,
+                          const std::string_view function_name,
+                          const std::string_view error_msg) noexcept;
 
-protected:
-
-private:
-
+    ~InitializationFailed() override;
 };
 
 }

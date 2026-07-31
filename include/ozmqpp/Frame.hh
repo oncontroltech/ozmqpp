@@ -48,7 +48,6 @@ public:
     //!
     explicit Frame(const std::vector<int8_t>& frame_data);
 
-
     //! @brief Constructor with initialization by a string (c++ style).
     //!
     //! @param message_text Envelop character string.
@@ -70,7 +69,7 @@ public:
     //! The frame is considered empty if no memory is allocated.
     //!
     //! @return true if no allocated memory, false otherwise.
-    //! 
+    //!
     [[nodiscard]] bool IsEmpty() const;
 
     //! @brief Retrieve the size information.
@@ -81,11 +80,9 @@ public:
 
     //! @brief Set frame information in raw data.
     //!
-    //! The information will be copied into frame internal containers. The 
-    //! message_information memory allocation must be handled elsewhere.
+    //! The information will be copied into frame internal containers.
     //!
-    //! @param message_information raw information array.
-    //! @param message_size raw information array size.
+    //! @param frame_data raw information array.
     //!
     void SetFrameData(const std::vector<int8_t>& frame_data);
 
@@ -112,7 +109,7 @@ public:
 
     //! @brief Copy operator overload.
     //!
-    //! @param socket_type type of socket to create.
+    //! @param other Frame with information to be copied from.
     //! @return Valid ZMQConnection object to be used on communication.
     //!
     Frame& operator=(const Frame& other);

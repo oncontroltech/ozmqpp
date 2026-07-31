@@ -30,7 +30,6 @@ namespace OZMQPP
 class ZMQ_API Message
 {
 public:
-
     //! @brief Default class constructor.
     //!
     Message();
@@ -86,8 +85,6 @@ public:
     //! @return Reference to self.
     //!
     Message& operator=(const Message& other);
-
-protected:
 
 private:
     //! @brief constituents message frames.

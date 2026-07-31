@@ -46,7 +46,7 @@ public:
 
     //! @brief Move constructor.
     //!
-    Connection(Connection&& other);
+    Connection(Connection&& other) noexcept;
 
     //! @brief Class destructor.
     //!
@@ -54,7 +54,7 @@ public:
     //!
     virtual ~Connection();
 
-    ConnectionStatus GetConnectionStatus() const;
+    [[nodiscard]] ConnectionStatus GetConnectionStatus() const;
 
     //! @brief Create connection for others connect to.
     //!
@@ -62,7 +62,7 @@ public:
     //!
     //! @param address_string String containing a valid zeromq address.
     //!
-    virtual void Bind(const std::string& address_string);
+    virtual void Bind(const std::string_view address_string);
 
     virtual void Unbind();
 
@@ -72,7 +72,7 @@ public:
     //!
     //! @param address_string String containing a valid zeromq address.
     //!
-    virtual void Connect(const std::string& address_string);
+    virtual void Connect(const std::string_view address_string);
 
     virtual void Disconnect();
 
@@ -82,7 +82,7 @@ public:
     //!
     //! @return True if context is valid.
     //!
-    virtual bool IsValid() const;
+    [[nodiscard]] virtual bool IsValid() const;
 
     //! @brief Send zeromq message.
     //!
@@ -100,13 +100,13 @@ public:
     //!
     //! @return Raw pointer to zeromq connection resource.
     //!
-    virtual void* GetRaw();
+    [[nodiscard]] virtual void* GetRaw();
 
     //! @brief Get unique identifier of this connection in the context
     //!
     //! @return ID of the connection inside the context it was created
     //!
-    unsigned int GetUniqueID() const;
+    [[nodiscard]] unsigned int GetUniqueID() const;
 
     //! @brief Method called on Context destruction
     //!
@@ -120,7 +120,7 @@ public:
 
     //! @brief Move operator overload.
     //!
-    Connection& operator=(Connection&& other);
+    Connection& operator=(Connection&& other) noexcept;
 
 protected:
 

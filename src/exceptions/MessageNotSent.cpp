@@ -1,15 +1,12 @@
 #include "ozmqpp/exceptions/MessageNotSent.hh"
 
-OZMQPP::MessageNotSent::MessageNotSent (const std::string& class_name,
-                                        const std::string& function_name,
-                                        const std::string& error_msg) noexcept :
+OZMQPP::MessageNotSent::MessageNotSent (const std::string_view class_name,
+                                        const std::string_view function_name,
+                                        const std::string_view error_msg) noexcept :
     Exception(class_name, function_name, error_msg)
 {
 
 }
 
-OZMQPP::MessageNotSent::~MessageNotSent()
-{
-
-}
+OZMQPP::MessageNotSent::~MessageNotSent() = default;
 

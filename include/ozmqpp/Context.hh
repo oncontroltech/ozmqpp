@@ -77,7 +77,7 @@ public:
 
     //! @brief Erase connection object from ownership list
     //!
-    //! @param connection_object Object to handle ownership.
+    //! @param connection_ref Object to handle ownership.
     //!
     void EraseConnection(const Connection& connection_ref);
 
@@ -86,12 +86,9 @@ public:
     //! @param other Object to copy information from.
     //! @return Reference to self.
     //!
-    Context& operator=(Context& other);
-
-protected:
+    Context& operator=(Context&& other) noexcept;
 
 private:
-
     //! @brief Pointer to zeromq raw context object.
     //!
     //! This context pointer will be used by native zeromq resources.

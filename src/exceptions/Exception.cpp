@@ -1,8 +1,8 @@
 #include "ozmqpp/exceptions/Exception.hh"
 
-OZMQPP::Exception::Exception(const std::string& class_name,
-                          const std::string& function_name,
-                          const std::string& error_msg) noexcept :
+OZMQPP::Exception::Exception(const std::string_view class_name,
+                             const std::string_view function_name,
+                             const std::string_view error_msg) noexcept :
     m_class_name(class_name),
     m_function_name(function_name),
     m_error_message(error_msg)
@@ -17,10 +17,7 @@ OZMQPP::Exception::Exception(const Exception& other) :
 {
 }
 
-OZMQPP::Exception::~Exception()
-{
-    
-}
+OZMQPP::Exception::~Exception() = default;
 
 std::string
 OZMQPP::Exception::GetClassName() const

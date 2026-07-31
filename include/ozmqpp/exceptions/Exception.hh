@@ -23,10 +23,10 @@ namespace OZMQPP
 class ZMQ_API Exception
 {
 public:
-    Exception(const std::string& class_name,
-              const std::string& function_name,
-              const std::string& error_msg) noexcept;
-    
+    Exception(const std::string_view class_name,
+              const std::string_view function_name,
+              const std::string_view error_msg) noexcept;
+
     Exception(const Exception& other);
 
     virtual ~Exception();
@@ -36,8 +36,6 @@ public:
     [[nodiscard]] std::string GetFunctionName() const;
 
     [[nodiscard]] std::string GetErrorMessage() const;
-
-protected:
 
 private:
     const std::string m_class_name;

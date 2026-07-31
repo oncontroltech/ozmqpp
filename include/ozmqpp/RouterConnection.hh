@@ -29,7 +29,6 @@ namespace OZMQPP
 class ZMQ_API RouterConnection : public Connection
 {
 public:
-
     RouterConnection() = delete;
 
     //! @brief Copy constructor.
@@ -57,7 +56,8 @@ public:
 protected:
     //! @brief Default class constructor.
     //!
-    //! @param raw_connection Connection to zeromq connection resource.
+    //! @param new_connection_id Internal ZMQ connection ID.
+    //! @param zmq_connection Connection to zeromq connection resource.
     //!
     RouterConnection(const unsigned int new_connection_id, void* zmq_connection);
 

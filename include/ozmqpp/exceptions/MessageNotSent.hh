@@ -22,11 +22,11 @@ namespace OZMQPP
 class ZMQ_API MessageNotSent : public Exception
 {
 public:
-    MessageNotSent (const std::string& class_name,
-                    const std::string& function_name,
-                    const std::string& error_msg) noexcept;
+    MessageNotSent(const std::string_view class_name,
+                   const std::string_view function_name,
+                   const std::string_view error_msg) noexcept;
 
-    virtual ~MessageNotSent();
+    ~MessageNotSent() override;
 };
 
 }

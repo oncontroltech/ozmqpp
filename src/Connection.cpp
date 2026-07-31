@@ -12,7 +12,7 @@
 // File const values
 static constexpr char CLASS_NAME[] = "Connection";
 
-OZMQPP::Connection::Connection(Connection&& other) :
+OZMQPP::Connection::Connection(Connection&& other) noexcept :
     m_connection_unique_id(other.m_connection_unique_id),
     m_zmq_connection(other.m_zmq_connection),
     m_connection_status(other.m_connection_status)
@@ -45,7 +45,7 @@ OZMQPP::Connection::GetConnectionStatus() const
 }
 
 void
-OZMQPP::Connection::Bind(const std::string& address_string)
+OZMQPP::Connection::Bind(const std::string_view address_string)
 {
     if (m_connection_status != ConnectionStatus::NOT_CONNECTED)
     {
@@ -56,7 +56,7 @@ OZMQPP::Connection::Bind(const std::string& address_string)
         throw InitializationFailed(CLASS_NAME, "Bind", "Invalid address");
     }
 
-    const int rc = zmq_bind(m_zmq_connection, address_string.c_str());
+    const int rc = zmq_bind(m_zmq_connection, address_string.data());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Bind", zmq_strerror(zmq_errno()));
@@ -83,7 +83,7 @@ OZMQPP::Connection::Unbind()
 }
 
 void
-OZMQPP::Connection::Connect(const std::string& address_string)
+OZMQPP::Connection::Connect(const std::string_view address_string)
 {
     if (m_connection_status != ConnectionStatus::NOT_CONNECTED)
     {
@@ -94,7 +94,7 @@ OZMQPP::Connection::Connect(const std::string& address_string)
         throw InitializationFailed(CLASS_NAME, "Connect", "Invalid address");
     }
 
-    const int rc = zmq_connect(m_zmq_connection, address_string.c_str());
+    const int rc = zmq_connect(m_zmq_connection, address_string.data());
     if (rc == -1)
     {
         throw InitializationFailed(CLASS_NAME, "Connect", zmq_strerror(zmq_errno()));
@@ -142,10 +142,8 @@ OZMQPP::Connection::SendMessage(const Message& message)
         {
             throw InitializationFailed(CLASS_NAME, "SendMessage", zmq_strerror(zmq_errno()));
         }
-        const std::vector<int8_t> frame_data = frame.GetFrameData();
-        // frame.GetFrameInformation(reinterpret_cast<char *>(zmq_msg_data(&message_struct)), frame_information_size);
-        // zmq_msg_data(&message_struct));
 
+        const std::vector<int8_t> frame_data = frame.GetFrameData();
         memcpy(zmq_msg_data(&message_struct), frame_data.data(), frame_data.size());
 
         // Check flags for multipart message
@@ -252,7 +250,7 @@ OZMQPP::Connection::ContextCloseCall()
 }
 
 OZMQPP::Connection&
-OZMQPP::Connection::operator=(Connection&& other)
+OZMQPP::Connection::operator=(Connection&& other) noexcept
 {
     m_connection_unique_id = other.m_connection_unique_id;
     m_zmq_connection = other.m_zmq_connection;
