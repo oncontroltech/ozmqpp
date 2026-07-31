@@ -17,10 +17,12 @@ if (OZMQPP_TESTS)
         add_executable(${name}_test ${name}_test.cpp)
         target_include_directories(${name}_test
             PRIVATE
-                ../include)
+                ../include
+        )
         target_link_libraries(${name}_test
             PRIVATE
-                ozmqpp)
+                ozmqpp
+        )
 
         add_dependencies(${name}_test ${ZMQ_TARGET})
         set_target_properties(${name}_test PROPERTIES EXCLUDE_FROM_ALL FALSE)
@@ -55,6 +57,30 @@ if (OZMQPP_TESTS)
                     $<TARGET_FILE:${name}_test>
                 WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
             )
+
+            add_executable(${name}_sanitized_test ${name}_test.cpp)
+            target_include_directories(${name}_sanitized_test
+                PRIVATE
+                    ../include
+            )
+            target_link_libraries(${name}_sanitized_test
+                PRIVATE
+                    ozmqpp
+            )
+            target_compile_options(${name}_sanitized_test
+                PRIVATE
+                    -fsanitize=address,leak,undefined
+                    -fno-omit-frame-pointer
+            )
+            target_link_options(${name}_sanitized_test
+                PRIVATE
+                    -fsanitize=address,leak,undefined
+                    -fno-omit-frame-pointer
+            )
+            add_dependencies(${name}_sanitized_test ${ZMQ_TARGET})
+            set_target_properties(${name}_sanitized_test PROPERTIES EXCLUDE_FROM_ALL FALSE)
+            add_test(NAME ${name}_sanitized_test COMMAND $<TARGET_FILE:${name}_sanitized_test>)
+
         endif ()
     endfunction()
 
