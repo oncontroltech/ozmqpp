@@ -22,7 +22,7 @@ target_link_libraries(${ZMQ_TARGET}
 get_target_property(ZMQ_INCLUDE_DIRS libzmq-static INTERFACE_INCLUDE_DIRECTORIES)
 if(ZMQ_INCLUDE_DIRS)
 	target_include_directories(${ZMQ_TARGET}
-		PUBLIC
+		INTERFACE
 			${ZMQ_INCLUDE_DIRS}
 	)
 endif()
